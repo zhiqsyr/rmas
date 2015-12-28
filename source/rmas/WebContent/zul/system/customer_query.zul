@@ -1,0 +1,82 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.CustomerQueryVM')">
+<north>
+<div>
+<groupbox>
+	<caption label="${c:l('customer.data.query')}"></caption>
+	<grid>
+		<columns>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('customer.companyname')}"></label>
+				<textbox value="@bind(vm.queryCustomer.fullName)"></textbox>
+				<label value="${c:l('customer.shortName')}"></label>
+				<textbox value="@bind(vm.queryCustomer.shortName)"></textbox>
+			</row>
+			<row spans="4">
+				<div sclass="searchButtonDiv">
+					<button image="/common/images/search.gif" label="${c:l('search')}" onClick="@command('onSearch')" ></button>
+				</div>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<div sclass="centerButtonDiv">
+	<button image="/common/images/itemAdd.gif" label="${c:l('addbutton')}" onClick="@command('onShowAdd')"></button>
+	<button image="/common/images/itemEdit.gif" label="${c:l('modifybutton')}" sclass="buttonSpace" onClick="@command('onShowEdit')"
+		disabled="@load(empty vm.selected)"></button>
+	<button image="/common/images/itemRemove.gif" label="Delete" sclass="buttonSpace" 
+		onClick="@command('onDelete')" disabled="@load(empty vm.selected)"
+		visible="@load(vm.isAdmin)"></button>		
+</div>
+</div>
+</north>
+<center>
+<listbox width="100%" vflex="true" 
+	model="@load(vm.result)" selectedItem="@save(vm.selected)">
+	<listhead>
+		<listheader label="${c:l('customer.companyname')}" sort="auto(fullName)" 
+				onSort="@command('onSort', prop='fullName', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.shortName')}" sort="auto(shortName)" 
+				onSort="@command('onSort', prop='shortName', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.contactorName')}" sort="auto(contactorName)" 
+				onSort="@command('onSort', prop='contactorName', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.mobilephone')}" sort="auto(mobilephone)" 
+				onSort="@command('onSort', prop='mobilephone', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.email')}" sort="auto(email)" 
+				onSort="@command('onSort', prop='email', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.fixphone')}" sort="auto(fixphone)" 
+				onSort="@command('onSort', prop='fixphone', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.addr')}" width="20%"></listheader>
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell label="@load(item.fullName)"></listcell>
+            <listcell label="@load(item.shortName)"></listcell>
+			<listcell label="@load(item.contactorName)"></listcell>
+			<listcell label="@load(item.mobilephone)"></listcell>
+			<listcell label="@load(item.email)"></listcell>
+			<listcell label="@load(item.fixphone)"></listcell>
+			<listcell>
+				<label value="@load(item.addr)" sclass="texthidenstyle" tooltiptext="@load(item.addr)"></label>
+			</listcell>
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+</zk>

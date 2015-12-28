@@ -1,0 +1,110 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window width="98%" apply="org.zkoss.bind.BindComposer" title="BOM LIST VIEW" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.BomListViewVM')">
+	
+	<grid>
+		<columns>
+			<column width="12%"></column>
+			<column width="12%"></column>
+			<column width="12%"></column>
+			<column width="25%"></column>
+			<column align="right"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('bom.materialNo')}"></label>
+				<textbox value="@bind(vm.query.materialNo)"></textbox>
+				<label value="${c:l('bom.materialName')}"></label>
+				<textbox value="@bind(vm.query.materialName)"></textbox>
+				<div sclass="searchButtonDiv">
+					<button image="/common/images/itemRemove.gif" label="${c:l('deleteallbutton')}" onClick="@command('onDeleteAll')"></button>
+					<button image="/common/images/search.gif" label="${c:l('search')}" sclass="buttonSpace" onClick="@command('onSearch')"></button>
+				</div>
+			</row>
+		</rows>
+	</grid>
+	
+	<listbox width="100%" vflex="true"
+		model="@load(vm.result)">
+		<listhead>
+			<listheader label="${c:l('bom.cno')}" width="90px"></listheader>
+			<listheader label="${c:l('bom.desc')}" width="105px"></listheader>
+			<listheader label="${c:l('bom.sno')}" width="60px"></listheader>
+			<listheader label="${c:l('bom.cate')}" width="70px"></listheader>
+			<listheader label="${c:l('bom.category')}" width="120px"></listheader>
+			<listheader label="${c:l('bom.materialNo')}" width="100px"></listheader>
+			<listheader label="${c:l('bom.materialName')}" width="140px"></listheader>
+			<listheader label="${c:l('bom.materialCharact')}" width="135px"></listheader>
+			<listheader label="${c:l('bom.manufacturer')}" width="125px"></listheader>
+			<listheader label="${c:l('bom.manufacturerModel')}" width="140px"></listheader>
+			<listheader label="${c:l('bom.dosage')}" width="70px"></listheader>
+			<listheader label="${c:l('bom.ino')}" width="125px"></listheader>
+			<listheader label="${c:l('bom.remove')}" width="60px"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell>
+					<label value="@load(item.cno)" sclass="texthidenstyle"
+						tooltiptext="@load(item.cno)"></label>
+				</listcell>				
+				<listcell>
+					<label value="@load(item.bomDesc)" sclass="texthidenstyle"
+						tooltiptext="@load(item.bomDesc)"></label>
+				</listcell>
+				<listcell>
+					<label value="@load(item.sno)" sclass="texthidenstyle"
+						tooltiptext="@load(item.sno)"></label>
+				</listcell>
+				<listcell>
+					<label value="@load(item.itemCate)" sclass="texthidenstyle"
+						tooltiptext="@load(item.itemCate)"></label>
+				</listcell>
+				<listcell>
+					<label value="@load(item.category)" sclass="texthidenstyle"
+						tooltiptext="@load(item.category)"></label>
+				</listcell>	
+				<listcell>
+					<label value="@load(item.materialNo)" sclass="texthidenstyle"
+						tooltiptext="@load(item.materialNo)"></label>
+				</listcell>								
+				<listcell>
+					<label value="@load(item.materialName)" sclass="texthidenstyle"
+						tooltiptext="@load(item.materialName)"></label>
+				</listcell>
+				<listcell>
+					<label value="@load(item.materialCharact)" sclass="texthidenstyle"
+						tooltiptext="@load(item.materialCharact)"></label>
+				</listcell>		
+				<listcell>
+					<label value="@load(item.manufacturer)" sclass="texthidenstyle"
+						tooltiptext="@load(item.manufacturer)"></label>
+				</listcell>							
+				<listcell>
+					<label value="@load(item.manufacturerModel)" sclass="texthidenstyle"
+						tooltiptext="@load(item.manufacturerModel)"></label>
+				</listcell>		
+				<listcell>
+					<label value="@load(item.dosage)" sclass="texthidenstyle"
+						tooltiptext="@load(item.dosage)"></label>
+				</listcell>						
+				<listcell>
+					<label value="@load(item.ino)" sclass="texthidenstyle"
+						tooltiptext="@load(item.ino)"></label>
+				</listcell>						
+				<listcell>
+					<div align="center">
+						<toolbarbutton image="/common/images/itemRemove.gif" 
+							onClick="@command('onRemove', bom=item)"></toolbarbutton>
+					</div>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</window>
+</zk>

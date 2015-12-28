@@ -1,0 +1,34 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page title="RMAS" contentType="text/html;charset=UTF-8"?>
+
+<?link  rel="stylesheet" type="text/css" href="/common/images/style.css"?>
+
+<zk xmlns:h="xhtml" xmlns:zk="zk">
+<div apply="org.zkoss.bind.BindComposer" sclass="logbody" width="100%" height="100%"
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.UserLoginVM')"  onCreate="@command('onCreate')">
+	
+	<h:form class="logfrm" method="post" action="/rmas/loginServlet" onSubmit="return validate()">
+		<h:input type="text" class="lognm" id="userName" name="userName" value="@load(vm.user.userNo)"/>
+		<h:input type="password" class="logpw" id="password" name="password" value="@load(vm.user.password)"/>	
+		<h:input type="submit" class="logsub" />
+	</h:form>
+	
+</div>
+
+<script type="text/javascript">
+	function validate() {
+		var userName = document.getElementById("userName");
+		var password = document.getElementById("password");
+		
+		if (userName.value == "") {
+			alert("${c:l('user.login.tip1')}");
+			return false;
+		}
+		if (password.value == "") {
+			alert("${c:l('user.login.tip2')}");
+			return false;
+		}
+		return true;
+	}
+</script>
+</zk>

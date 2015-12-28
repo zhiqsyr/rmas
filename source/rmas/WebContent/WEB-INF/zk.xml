@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk>
+
+	<system-config>
+		<disable-event-thread>false</disable-event-thread>
+	</system-config>
+
+	<desktop-config>
+		<theme-uri>/common/css/styles.css</theme-uri>
+	</desktop-config>
+	
+	<session-config>
+		<session-timeout>-1</session-timeout>	<!-- 永不过期 -->
+	</session-config>	
+
+	<language-config>
+		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
+	</language-config>
+
+</zk>

@@ -1,0 +1,59 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.ConfigQueryVM')">
+<west width="35%" autoscroll="true">
+<groupbox height="100%">
+	<caption label="${c:l('dict.type')}"></caption>
+	<listbox width="100%" model="@load(vm.dictTypes)" 
+		selectedItem="@bind(vm.selectedType)"
+		onSelect="@command('onSelectType')">
+		<listhead>
+			<listheader width="40%" label="${c:l('dict.typeName')}"></listheader>
+			<listheader label="${c:l('dict.typeKey')}"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.typeName)"></listcell>
+				<listcell label="@load(item.typeKey)"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+</groupbox>
+</west>
+<center>
+<groupbox height="100%">
+	<caption label="${c:l('element.list')}"></caption>
+	<vbox>
+	<listbox width="100%" model="@load(vm.dictCodes)" mold="paging" pageSize="10"
+		selectedItem="@bind(vm.selectedCode)">
+		<listhead>
+			<listheader label="${c:l('element.name')}" width="25%"></listheader>
+			<listheader label="${c:l('element.code')}" width="30%"></listheader>
+			<listheader label="${c:l('element.description')}"></listheader>
+			<listheader label="${c:l('element.suquence')}" width="100px"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.codeName)"></listcell>
+				<listcell label="@load(item.codeKey)"></listcell>
+				<listcell label="@load(item.codeDesc)"></listcell>
+				<listcell label="@load(item.codeOrder)"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<div sclass="submitButtonDiv">
+		<button image="/common/images/itemAdd.gif" label="${c:l('addbutton')}" onClick="@command('onShowAdd')" 
+			disabled="@load(empty vm.selectedType or vm.selectedType.modifiable eq 'NO')"></button>
+		<button image="/common/images/itemEdit.gif" label="${c:l('modifybutton')}" sclass="buttonSpace"  onClick="@command('onShowEdit')" 
+			disabled="@load(empty vm.selectedCode or vm.selectedType.modifiable eq 'NO')"></button>
+		<button image="/common/images/itemRemove.gif" label="${c:l('deletebutton')}" sclass="buttonSpace"  
+			onClick="@command('onDelete')" disabled="@load(empty vm.selectedCode or vm.selectedType.modifiable eq 'NO')"></button>
+	</div>
+	</vbox>
+</groupbox>
+</center>
+</borderlayout>
+</zk>

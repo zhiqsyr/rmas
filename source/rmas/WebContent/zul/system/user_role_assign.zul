@@ -1,0 +1,34 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('role.distribution')}" width="40%" border="normal"
+	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.UserRoleAssignVM')">
+<grid>
+	<columns>
+		<column width="35%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<label value="${c:l('name')}"></label>
+			<label value="@load(vm.user.userName)"></label>
+		</row>
+		<row>
+			<label value="${c:l('role')}"></label>
+			<vbox>
+				<checkbox forEach="${roleList }" id="${each.roleId }"
+					label="${each.roleName }" tooltiptext="${each.roleDesc }" 
+					checked="${each.isRelated }"></checkbox>
+			</vbox>
+		</row>
+	</rows>
+</grid>
+
+<div sclass="submitButtonDiv">
+	<button image="/common/images/itemConfirm.gif" label="${c:l('confirmbutton')}" onClick="@command('onSubmit')"></button>
+	<button image="/common/images/stop.gif" label="${c:l('cancelbutton')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+</window>
+</zk>

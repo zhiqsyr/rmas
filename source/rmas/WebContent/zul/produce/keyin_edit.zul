@@ -1,0 +1,258 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" border="normal" width="98%"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.KeyinEditVM')">
+<grid style="border:0px">
+	<columns>
+		<column width="15%" align="right"></column>
+		<column width="21%"></column>
+		<column width="13%" align="right"></column>
+		<column width="21%"></column>
+		<column width="14%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<label value="${c:l('p.cutomer.name')}"></label>
+			<listbox mold="select"
+				model="@load(vm.customerLabelValueBeans)"
+				selectedItem="@bind(vm.customerId) @converter('com.dl.rmas.web.converter.SelectMoldConverter')"
+				onSelect="@command('onSelectCustomer')">
+				<template name="model" var="item">
+					<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+				</template>
+			</listbox>
+			<label value="${c:l('rma.no')}"></label>
+			<listbox mold="select"
+				model="@load(vm.rmaLabelValueBeans)"
+				selectedItem="@bind(vm.order.rma) @converter('com.dl.rmas.web.converter.SelectMoldConverter')"
+				onSelect="@command('onSelectRma')" disabled="@load(empty vm.customerId)">
+				<template name="model" var="item">
+					<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+				</template>
+			</listbox>
+			<label value="${c:l('customer.order.no')}"></label>
+			<label value="@load(vm.order.custrma)"></label>
+		</row>
+		<row spans="1,1,1,3">
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('p.tat.level')}"></label>
+			</span>
+			<hbox align="center">
+				<listbox mold="select" width="80px"
+					model="@load(vm.tatLevelLabelValueBeans)"
+					selectedItem="@bind(vm.order.tatLevel) 
+						@converter('com.dl.rmas.web.converter.SelectMoldConverter')"
+					onSelect="@command('onSelectTatLevel')" disabled="@load(empty vm.order.rma)">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+				<label style="margin-left:10px;color:green;font-weight:blod;" value="@load(vm.order.tatLevel) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')"></label>
+				<label style="margin-left:10px;" value="${c:l('p.day')}"></label>
+			</hbox>
+			<label value="Close Day"></label>
+			<label value="@load(vm.order.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></label>
+		</row>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="Total QTY"></label>
+			</span>
+			<intbox value="@load(vm.order.totalQty) @save(vm.order.totalQty)" width="80px" 
+				onChange="@command('onChangeTotalQty')" 
+				disabled="@load(empty vm.order.rma)"></intbox>
+			<label value="Total Finished"></label>
+			<label value="@load(vm.order.totalFinished)" style="color:green;font-weight:blod;font-size:20px"></label>
+			<label value="Total Remain"></label>
+			<label value="@load(vm.order.totalRemain)" style="color:red;font-weight:blod;font-size:20px"></label>
+		</row>
+		<row spans="1,5">
+			<label value="${c:l('rma.status')}"></label>
+			<label value="@load(vm.order.keyinStatus)"></label>
+		</row>
+	</rows>
+</grid>	
+
+<hbox widths="65%,35%">
+	<groupbox mold="3d">
+	<caption label="${c:l('p.mainborad.info')}"></caption>
+	<grid style="border:0px">
+		<columns>
+			<column width="23%" align="right"></column>
+			<column width="28%" align="left"></column>
+			<column align="right"></column>
+			<column width="25%" align="left"></column>
+		</columns>
+		<rows>
+			<row spans="1,3">
+				<span>
+					<label value="*" style="color:red"></label>
+					<label value="PN"></label>
+				</span>
+				<!-- 
+				<listbox mold="select"
+					model="@load(vm.pnLabelValueBeans)"
+					selectedItem="@bind(vm.sn.productId) 
+						@converter('com.dl.rmas.web.converter.SelectMoldConverter')"
+					onSelect="@command('onFreshPn', productId=vm.sn.productId)">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+				 -->
+				<bandbox id="bb" onChanging="@command('onListPns', _4Pre=event.value)" width="300px"
+					style="text-transform:uppercase;" value="@load(vm.product.pn)"
+				    buttonVisible="true" autodrop="true">
+					<bandpopup height="220px">
+						<vbox width="300px">
+							<listbox id="sltLb" width="100%" 
+								mold="paging" pageSize="8"
+								model="@load(vm._4Slts)" onSelect="bb.value=self.getSelectedItem().value.pn">
+								<template name="model" var="item">
+									<listitem onClick="@command('onClickPn', product=item, bb=bb)">
+										<listcell>
+											<label value="@load(item.pn)" sclass="texthidenstyle" tooltiptext="@load(item.pn)"></label>
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</vbox>									
+					</bandpopup>
+				</bandbox>				
+			</row>
+			<row spans="1,3">
+				<span>
+					<label value="*" style="color:red"></label>
+					<label value="SN"></label>
+				</span>
+				<textbox value="@load(vm.sn.sn) @save(vm.sn.sn)" readonly="@load(not empty vm.sn.snId)"
+					constraint="no empty" maxlength="100" onBlur="@command('onFreshSn', sn=vm.sn.sn)"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('re-service.status')}"></label>
+				<label value="@load(vm.sn.keepStatus)"></label>
+				<label value="${c:l('p.twice.back.times')}"></label>
+				<label value="@load(vm.sn.twiceBackTimes)"></label>
+			</row>
+			<row spans="1,3">
+				<label value="${c:l('p.cid.type')}"></label>
+				<listbox mold="select"
+					model="@load(vm.cidTypeLabelValueBeans)"
+					selectedItem="@bind(vm.sn.cidType) 
+						@converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+			</row>
+			<row spans="1,3">
+				<label value="${c:l('p.customer.fault.desc')}"></label>
+				<listbox mold="select"
+					model="@load(vm.customerFaultDescLabelValueBeans)"
+					selectedItem="@bind(vm.sn.customerFaultDesc) 
+						@converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+			</row>
+			<row spans="1,3">
+				<label value="Outlet"></label>
+				<listbox mold="select"
+					model="@load(vm.outletLabelValueBeans)"
+					selectedItem="@bind(vm.sn.outlet) 
+						@converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+			</row>
+		</rows>
+	</grid>
+	</groupbox>
+	<groupbox mold="3d">
+	<caption label="${c:l('p.product.info')}"></caption>
+	<grid style="border:0px">
+		<columns>
+			<column align="right"></column>
+			<column width="65%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('p.product.pn')}"></label>
+				<label value="@load(vm.product.pn)"></label>
+			</row>
+			<row>
+				<label value="${c:l('p.product.brand')}"></label>
+				<label value="@load(vm.product.brand)"></label>
+			</row>
+			<row>
+				<label value="${c:l('p.product.model.no')}"></label>
+				<label value="@load(vm.product.modelNo)"></label>
+			</row>
+			<row>
+				<label value="${c:l('p.product.pcb.type')}"></label>
+				<label value="@load(vm.product.pcbType)"></label>
+			</row>
+			<row>
+				<label value="${c:l('p.product.type')}"></label>
+				<label value="@load(vm.product.productType) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')"></label>
+			</row>
+			<row>
+				<label value="${c:l('p.product.keey.days')}"></label>
+				<label value="@load(vm.product.keepDays)"></label>
+			</row>
+		</rows>
+	</grid>
+	</groupbox>
+</hbox>
+
+<grid style="border:0px">
+	<columns>
+		<column width="15%" align="right"></column>
+		<column width="21%"></column>
+		<column width="13%" align="right"></column>
+		<column width="21%"></column>
+		<column width="14%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row spans="1,1,1,3">
+			<label value="Fail Code"></label>
+			<textbox value="@bind(vm.sn.failCode)"></textbox>
+			<label value="Case Id"></label>
+			<textbox value="@bind(vm.sn.caseId)"></textbox>
+		</row>
+		<row>
+			<label value="Remark"></label>
+			<textbox value="@bind(vm.sn.remark)"></textbox>
+			<label value="MAC/IMEI1"></label>
+			<textbox value="@bind(vm.sn.macImei1)"></textbox>
+			<label value="MAC/IMEI2"></label>
+			<textbox value="@bind(vm.sn.macImei2)"></textbox>
+		</row>
+		<row spans="1,5">
+			<label value="Next Step"></label>
+			<radiogroup selectedItem="@bind(vm.nextStep)">
+				<radio value="MIDH" label="MIDH L1KEYIN"></radio>
+				<space></space>
+				<radio value="L1KEYIN" label="OTHER L1KEYIN"></radio>
+			</radiogroup>
+		</row>
+	</rows>
+</grid>
+<separator></separator>
+<div align="center">
+	<button image="/common/images/save.png" label="${c:l('p.save')}" onClick="@command('onSubmit')" 
+		disabled="@load(empty vm.order.rma 
+			|| empty vm.order.tatLevel || empty vm.order.totalQty
+			|| empty vm.sn.productId)"></button>
+	<button image="/common/images/itemConfirm.gif" label="${c:l('p.keyin.finish')}" onClick="@command('onFinish')" disabled="@load(vm.order.totalRemain ne 0)" sclass="buttonSpace"></button>
+	<button image="/common/images/stop.gif" label="${c:l('p.close')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+</window>
+</zk>

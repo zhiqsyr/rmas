@@ -1,0 +1,108 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.UserQueryVM')">
+<north title="${c:l('user.management')}">
+<div>
+<groupbox>
+	<grid>
+		<columns>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('user.name')}"></label>
+				<textbox value="@bind(vm.queryDto.userName)"></textbox>
+				<label value="${c:l('user.deptname')}"></label>
+				<textbox value="@bind(vm.queryDto.deptName)"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('user.post')}"></label>
+				<textbox value="@bind(vm.queryDto.post)"></textbox>
+				<label value="${c:l('user.careerlevel')}"></label>
+				<textbox value="@bind(vm.queryDto.careerLevel)"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('role')}"></label>
+				<textbox value="@bind(vm.queryDto.roleName)"></textbox>				
+				<label value="${c:l('validity')}"></label>
+				<listbox mold="select" model="@load(vm.validityLabelValueBeans)" 
+					selectedItem="@bind(vm.queryDto.validity) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+			</row>
+			<row spans="4">
+				<div sclass="searchButtonDiv">
+					<button image="/common/images/search.gif" label="${c:l('search')}" onClick="@command('onSearch')"></button>
+				</div>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<div sclass="centerButtonDiv">
+	<button image="/common/images/itemAdd.gif" label="${c:l('addbutton')}" onClick="@command('onShowAdd')"></button>
+	<button image="/common/images/itemEdit.gif" label="${c:l('modifybutton')}" sclass="buttonSpace" disabled="@load(empty vm.selected)" onClick="@command('onShowEdit')"></button>
+	<button image="/common/images/user.gif" label="${c:l('role.distribution')}" sclass="buttonSpace" disabled="@load(empty vm.selected)" onClick="@command('onShowAssignRoles')"></button>
+</div>
+</div>
+</north>
+<center>
+<listbox width="100%" vflex="true"
+	model="@load(vm.result)" selectedItem="@bind(vm.selected)">
+	<listhead>
+		<listheader label="${c:l('user.account')}" width="125px" sort="auto(userNo)" 
+				onSort="@command('onSort', prop='userNo', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('user.name')}" width="150px" sort="auto(userName)" 
+				onSort="@command('onSort', prop='userName', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('user.phone')}" width="150px" sort="auto(phone)" 
+				onSort="@command('onSort', prop='phone', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('user.deptname')}" sort="auto(deptName)" 
+				onSort="@command('onSort', prop='deptName', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('user.post')}" sort="auto(post)" 
+				onSort="@command('onSort', prop='post', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('user.careerlevel')}" width="125px" sort="auto(careerLevel)" 
+				onSort="@command('onSort', prop='careerLevel', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('role')}" width="150px"></listheader>				
+		<listheader label="${c:l('validity')}" width="100px" sort="auto(validity)" 
+				onSort="@command('onSort', prop='validity', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('operate')}" width="125px" align="center"></listheader>
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell label="@load(item.userNo)"></listcell>
+			<listcell label="@load(item.userName)"></listcell>
+			<listcell label="@load(item.phone)"></listcell>
+			<listcell label="@load(item.deptName)"></listcell>
+			<listcell label="@load(item.post)"></listcell>
+			<listcell label="@load(item.careerLevel)"></listcell>
+			<listcell>
+				<label value="@load(item.userId) @converter('com.dl.rmas.web.converter.UserIdRolesConverter')" 
+					tooltiptext="@load(item.userId) @converter('com.dl.rmas.web.converter.UserIdRolesConverter')" 
+					sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell label="@load(item.validity) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>
+			<listcell>
+				<toolbarbutton image="/common/images/userpsw.gif" tooltiptext="${c:l('modify.password')}" onClick="@command('onShowPasswordEdit', user=item)"></toolbarbutton>
+				<toolbarbutton image="/common/images/itemPass.gif" tooltiptext="${c:l('set.invalid')}" 
+					visible="@load(item.validity eq 'INVALID')" onClick="@command('onValidUser', user=item)"></toolbarbutton>
+				<toolbarbutton image="/common/images/itemNopass.gif" tooltiptext="${c:l('set.valid')}" 
+					visible="@load(item.validity eq 'VALID')" onClick="@command('onInValidUser', user=item)"></toolbarbutton>
+			</listcell>
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+</zk>

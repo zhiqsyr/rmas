@@ -1,0 +1,116 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.statis.OrderTrackVM')">
+<north>
+<div>
+	<groupbox>
+		<caption label="${c:l('order.track')}"></caption>
+		<grid>
+			<columns>
+				<column width="15%" align="right"></column>
+				<column width="35%"></column>
+				<column width="15%" align="right"></column>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<label value="${c:l('customer.companyname')}"></label>
+					<listbox mold="select"
+						model="@load(vm.customerLabelValueBeans)"
+						selectedItem="@bind(vm.query.customerId) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+						<template name="model" var="item">
+							<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+						</template>
+					</listbox>
+					<label value="${c:l('customer.order.no')}"></label>
+					<textbox value="@bind(vm.query.custrma)"></textbox>
+				</row>
+				<row>
+					<label value="${c:l('rma.no')}"></label>
+					<textbox value="@bind(vm.query.rma)"></textbox>
+					<label value="${c:l('close.date')}"></label>
+					<hbox>
+						<datebox value="@bind(vm.query.closeTimeFrom)"></datebox>
+						~
+						<datebox value="@bind(vm.query.closeTimeTo)"></datebox>
+					</hbox>
+				</row>
+				<row spans="1,1,2">
+					<label value="RMA DO Status"></label>
+					<listbox mold="select"
+						model="@load(vm.rmaDoStatusLabelValueBeans)"
+						selectedItem="@bind(vm.query.doStatus) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+						<template name="model" var="item">
+							<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+						</template>
+					</listbox>
+					<div sclass="searchButtonDiv">
+						<button image="/common/images/xls.png" label="Export to Excel" onClick="@command('onExport')"></button>
+						<button label="${c:l('search')}" image="/common/images/search.gif" sclass="buttonSpace" onClick="@command('onSearch')" ></button>
+					</div>
+				</row>
+			</rows>
+		</grid>
+	</groupbox>
+</div>
+</north>
+<center>
+	<listbox width="100%" vflex="true" 
+		model="@load(vm.result)" selectedItem="@bind(vm.selected)">
+		<listhead>
+			<listheader label="${c:l('details')}" align="center" width="90px"></listheader>
+			<listheader label="${c:l('rma.no')}" width="130px"></listheader>
+			<listheader label="${c:l('customer.order.no')}" width="125px"></listheader>
+			<listheader label="${c:l('close.date')}" width="90px"></listheader>
+			<listheader label="${c:l('receive.status')}" width="105px"></listheader>
+			<listheader label="${c:l('entry.status')}" width="110px"></listheader>
+			<listheader label="RMA DO Status" width="105px"></listheader>
+			<listheader label="Wait L1keyin Midh" width="120px"></listheader>
+			<listheader label="Wait Flash" width="95px"></listheader>
+			<listheader label="Wait L1keyin Other" width="120px"></listheader>
+			<listheader label="Wait Repair" width="100px"></listheader>
+			<listheader label="Wait QC" width="85px"></listheader>
+			<listheader label="Wait DO" width="85px"></listheader>
+			<listheader label="Onlie" width="85px"></listheader>
+			<listheader label="DONE" width="85px"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell>
+					<toolbarbutton image="/common/images/itemView.gif" 
+						onClick="@command('onView', orderId=item.orderId)"></toolbarbutton>
+				</listcell>			
+				<listcell>
+					<label value="@load(item.rma)" tooltiptext="@load(item.rma)" 
+						sclass="texthidenstyle"></label>
+				</listcell>
+				<listcell>
+					<label value="@load(item.custrma)" tooltiptext="@load(item.custrma)" 
+						sclass="texthidenstyle"></label>
+				</listcell>
+				<listcell label="@load(item.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(item.receiveStatus) @converter('com.dl.rmas.web.converter.EnumTypeStringConverter', clazz='com.dl.rmas.common.enums.ReceiveStatus')"></listcell>
+				<listcell label="@load(item.keyinStatus) @converter('com.dl.rmas.web.converter.EnumTypeStringConverter', clazz='com.dl.rmas.common.enums.KeyinStatus')"></listcell>
+				<listcell label="@load(item.doStatus)"></listcell>
+				<listcell label="@load(item.waitMidhCount)"></listcell>
+				<listcell label="@load(item.waitFlashCount)"></listcell>
+				<listcell label="@load(item.waitL1keyinCount)"></listcell>
+				<listcell label="@load(item.waitReparingCount)"></listcell>
+				<listcell label="@load(item.waitQcCount)"></listcell>
+				<listcell label="@load(item.waitDoCount)"></listcell>
+				<listcell label="@load(item.onlineCount)"></listcell>
+				<listcell label="@load(item.doneCount)"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>	
+</south>
+</borderlayout>
+</zk>

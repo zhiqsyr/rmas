@@ -1,0 +1,147 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.KeyinQueryVM')">
+<north>
+<div>
+<groupbox>
+	<caption label="Keyin"></caption>
+	<grid>
+		<columns>
+			<column width="13%" align="right"></column>
+			<column width="35%"></column>
+			<column width="17%" align="right"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('rma.no')}"></label>
+				<textbox value="@bind(vm.snDto.rma)"></textbox>
+				<label value="${c:l('customer.order.no')}"></label>
+				<textbox value="@bind(vm.snDto.custrma)"></textbox>
+			</row>
+			<row>
+				<label value="SN"></label>
+				<textbox value="@bind(vm.snDto.sn)"></textbox>
+				<label value="PN"></label>
+				<textbox value="@bind(vm.snDto.pn)"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('receive.date')}"></label>
+				<hbox>
+					<datebox value="@bind(vm.snDto.receiveDateFrom)"></datebox>
+					~
+					<datebox value="@bind(vm.snDto.receiveDateTo)"></datebox>
+				</hbox>
+				<label value="${c:l('close.date')}"></label>
+				<hbox>
+					<datebox value="@bind(vm.snDto.closeDateFrom)"></datebox>
+					~
+					<datebox value="@bind(vm.snDto.closeDateTo)"></datebox>
+				</hbox>
+			</row>
+			<row>
+				<label value="${c:l('data.entering.person')}"></label>
+				<textbox value="@bind(vm.snDto.createUserName)"></textbox>
+				<label value="${c:l('keyin.date')}"></label>
+				<hbox>
+					<datebox value="@bind(vm.snDto.createTimeFrom)"></datebox>
+					~
+					<datebox value="@bind(vm.snDto.createTimeTo)"></datebox>
+				</hbox>
+			</row>
+			<row spans="1,1,2">
+				<label value="${c:l('rma.status')}"></label>
+				<listbox mold="select"
+					model="@load(vm.typeStatusLabelValueBeans)"
+					selectedItem="@bind(vm.snDto.keyinStatus) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+				<div sclass="searchButtonDiv">
+					<button image="/common/images/search.gif" label="${c:l('search')}" onClick="@command('onSearch')" ></button>
+				</div>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+
+<div sclass="centerButtonDiv">
+	<button image="/common/images/itemAdd.gif" label="${c:l('p.add')}" onClick="@command('onShowAdd')"></button>
+	<button image="/common/images/itemEdit.gif" label="${c:l('p.update')}" sclass="buttonSpace" onClick="@command('onShowEdit')" 
+		disabled="@load(empty vm.selected or vm.selected.order.keyinStatus eq 'CLOSE' or not empty vm.selected.assignTime or not empty vm.selected.finalResult)"></button>
+	<button image="/common/images/xls.png" label="${c:l('p.export.excel')}" sclass="buttonSpace" visible="false"></button>
+	<button image="/common/images/fax.gif" label="${c:l('p.print.label')}" sclass="buttonSpace" 
+		onClick="@command('onShowPrint')"
+		disabled="@load(empty vm.selected)"></button>
+</div>
+</div>
+</north>
+<center>
+<listbox width="100%" vflex="true"
+	model="@load(vm.result)" selectedItem="@bind(vm.selected)">
+	<listhead>
+		<listheader label="${c:l('customer.order.no')}" width="125px" sort="auto(order.custrma)" 
+				onSort="@command('onSort', prop='order.custrma', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('rma.no')}" width="125px" sort="auto(order.rma)" 
+				onSort="@command('onSort', prop='order.rma', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('rma.index')}" width="75px" align="center" sort="auto(snIndex)" 
+				onSort="@command('onSort', prop='snIndex', ascending=event.ascending)"></listheader>
+		<listheader label="SN" sort="auto(sn)" width="190px"
+				onSort="@command('onSort', prop='sn', ascending=event.ascending)"></listheader>
+		<listheader label="PN" sort="auto(productId)" width="110px"
+				onSort="@command('onSort', prop='productId', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('receive.date')}" width="90px" sort="auto(order.receiveTime)" 
+				onSort="@command('onSort', prop='order.receiveTime', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('close.date')}" width="90px" sort="auto(order.closeTime)" 
+				onSort="@command('onSort', prop='order.closeTime', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('data.entering.person')}" width="95px" sort="auto(createUser)" 
+				onSort="@command('onSort', prop='createUser', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('keyin.date')}" width="90px" sort="auto(createTime)" 
+				onSort="@command('onSort', prop='createTime', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('rma.status')}" width="110px" sort="auto(order.keyinStatus)" 
+				onSort="@command('onSort', prop='order.keyinStatus', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('flow.status')}" width="95px" sort="auto(status)" 
+				onSort="@command('onSort', prop='status', ascending=event.ascending)"></listheader>
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell>
+				<label value="@load(item.order.custrma)" tooltiptext="@load(item.order.custrma)" sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.order.rma)" tooltiptext="@load(item.order.rma)" sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell label="@load(item.snIndex)"></listcell>
+			<listcell>
+				<label value="@load(item.sn)" tooltiptext="@load(item.sn)" sclass="texthidenstyle"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')" 
+					tooltiptext="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')" 
+					sclass="texthidenstyle"></label>
+			</listcell>				
+			<listcell label="@load(item.order.receiveTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.order.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell>
+				<label value="@load(item.createUser) @converter('com.dl.rmas.web.converter.UserIdConverter')" 
+					tooltiptext="@load(item.createUser) @converter('com.dl.rmas.web.converter.UserIdConverter')" 
+					sclass="texthidenstyle"></label>			
+			</listcell>
+			<listcell label="@load(item.createTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.order.keyinStatus) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>
+			<listcell label="@load(item.status) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+</zk>

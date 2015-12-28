@@ -1,0 +1,106 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window width="95%" height="95%" title="${c:l('produce.details')}" apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.statis.SnTrackVM')">
+<borderlayout width="100%" height="100%">
+<north>
+<div>
+	<groupbox style="border:none">
+	<grid>
+		<columns>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('rma.no')}"></label>
+				<label value="@bind(vm.order.rma)"></label>
+				<label value="${c:l('serialnumber')}"></label>
+				<textbox value="@bind(vm.query.snIndex)"></textbox>
+			</row>
+			<row>
+				<label value="PN"></label>
+				<textbox value="@bind(vm.query.pn)"></textbox>
+				<label value="SN"></label>
+				<textbox value="@bind(vm.query.sn)"></textbox>
+			</row>
+			<row spans="1,1,2">
+				<label value="${c:l('status')}"></label>
+				<listbox mold="select"
+					model="@load(vm.snStatusLabelValueBeans)"
+					selectedItem="@bind(vm.query.status) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+				<div sclass="searchButtonDiv">
+					<button label="${c:l('search')}" image="/common/images/search.gif" onClick="@command('onSearch')" ></button>
+				</div>
+			</row>
+		</rows>
+	</grid>
+	</groupbox>
+</div>
+</north>
+<center>
+	<listbox width="100%" vflex="true" 
+		model="@load(vm.result)">
+		<listhead>
+			<listheader label="${c:l('serialnumber')}" width="80px"></listheader>
+			<listheader label="PN" width="125px"></listheader>
+			<listheader label="SN" width="185px"></listheader>
+			<listheader label="${c:l('status')}" width="90px"></listheader>
+			<listheader label="${c:l('flash.engineer')}" width="100px"></listheader>
+			<listheader label="${c:l('repair.engineer')}" width="105px"></listheader>		
+			<listheader label="${c:l('close.date')}" width="90px"></listheader>
+			<listheader label="${c:l('guarantee.status')}" width="120px"></listheader>
+			<listheader label="${c:l('return.times')}" width="90px"></listheader>
+			<listheader label="${c:l('circulation')}" width="80px"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.snIndex)"></listcell>
+				<listcell>
+					<label value="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')" 
+						sclass="texthidenstyle" 
+						tooltiptext="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')"></label>
+				</listcell>
+				<listcell>
+					<label value="@load(item.sn)" sclass="texthidenstyle" tooltiptext="@load(item.sn)"></label>
+				</listcell>
+				<listcell label="@load(item.status) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>
+				<listcell>
+					<label value="@load(item.flasher) @converter('com.dl.rmas.web.converter.UserIdConverter')"
+						sclass="texthidenstyle"
+						tooltiptext="@load(item.flasher) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+				</listcell>			
+				<listcell>
+					<label value="@load(item.repairer) @converter('com.dl.rmas.web.converter.UserIdConverter')"
+						sclass="texthidenstyle"
+						tooltiptext="@load(item.repairer) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+				</listcell>					
+				<listcell label="@load(item.order.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(item.keepStatus)"></listcell>
+				<listcell label="@load(item.twiceBackTimes)"></listcell>
+				<listcell>
+					<div align="center">
+						<toolbarbutton image="/common/images/itemView.gif" 
+							onClick="@command('onView', snId=item.snId)"></toolbarbutton>
+					</div>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>	
+</south>
+</borderlayout>
+</window>
+</zk>

@@ -1,0 +1,16 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<?component name="textbox" 	extends="textbox"  width="85%"?>
+<?component name="groupbox" extends="groupbox" mold="3d" closable="false"?>
+<?component name="grid" 	extends="grid" 	   style="border:0px;"?>
+<?component name="listbox" 	extends="listbox"  width="85%"?>
+<?component name="listhead" extends="listhead" sizable="true"?>
+<?component name="paging" 	extends="paging"   detailed="true"?>
+<?component name="north" 	extends="north"  border="none"?>
+<?component name="center" 	extends="center" border="none" autoscroll="true"?>
+<?component name="south" 	extends="south"  border="none"?>
+
+<!-- 添加空标签，避免org.xml.sax.SAXParseException: Premature end of file. -->
+<zk></zk>

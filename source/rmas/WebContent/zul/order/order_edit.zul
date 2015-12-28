@@ -1,0 +1,66 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('order_edit.title')}" width="90%"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.order.OrderEditVM')">
+<grid>
+	<columns>
+		<column width="18%" align="right"></column>
+		<column width="32%"></column>
+		<column width="17%" align="right"></column>
+		<column width="33%"></column>
+	</columns>
+	<rows>
+		<row spans="1,3">
+			<label value="${c:l('rma.no')}"></label>
+			<label value="@load(vm.receiveOrder.rma)"></label>
+		</row>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('customer.order.no')}"></label>
+			</span>
+			<textbox value="@load(vm.receiveOrder.custrma) @save(vm.receiveOrder.custrma, before='onSubmit')"
+				constraint="no empty"  maxlength="50"></textbox>
+			<label value="${c:l('customer.companyname')}"></label>
+			<label value="@load(vm.receiveOrder.customerId) @converter('com.dl.rmas.web.converter.CustomerIdConverter')"></label>
+		</row>
+		<row>
+		    <span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('express.company')}"></label>
+			</span>
+			<textbox value="@load(vm.receiveOrder.expressCom) @save(vm.receiveOrder.expressCom, before='onSubmit')"
+				constraint="no empty"  maxlength="100"></textbox>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('express.number')}"></label>
+			</span>
+			<textbox value="@bind(vm.receiveOrder.expressNo) @save(vm.receiveOrder.expressNo, before='onSubmit')"
+			 	constraint="no empty"  maxlength="50"></textbox>
+		</row>
+		<row spans="1,3">
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('receipt.number')}"></label>
+			</span>
+			<hbox>
+				<intbox value="@bind(vm.receiveOrder.boxes) @save(vm.receiveOrder.boxes, before='onSubmit')" 
+					constraint="no empty"  maxlength="10"></intbox>
+				<label value="${c:l('box')}"></label>
+			</hbox>
+		</row>
+		<row spans="1,3">
+			<label value="${c:l('remarks')}"></label>
+			<textbox value="@bind(vm.receiveOrder.remarks)" rows="5" width="60%"></textbox>
+		</row>
+	</rows>
+</grid>
+	
+<div sclass="submitButtonDiv">
+	<button image="/common/images/save.png" label="${c:l('savebutton')}" onClick="@command('onSubmit')" ></button>
+	<button image="/common/images/stop.gif" label="${c:l('cancelbutton')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+</window>
+</zk>

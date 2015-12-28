@@ -1,0 +1,73 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.KeyoutQueryVM')">
+<north>
+<div>
+<groupbox>
+	<caption label="KEYOUT"></caption>
+	<grid>
+		<columns>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('rma.no')}"></label>
+				<textbox value="@bind(vm.snDto.rma)"></textbox>
+				<label value="SN："></label>
+				<textbox value="@bind(vm.snDto.sn)"></textbox>
+			</row>
+			<row spans="1,1,2">
+				<label value="PN"></label>
+				<textbox value="@bind(vm.snDto.pn)"></textbox>
+				<div sclass="searchButtonDiv">
+					<button image="/common/images/search.gif" label="${c:l('search')}" onClick="@command('onSearch')"></button>					
+				</div>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<div sclass="centerButtonDiv">
+	<button label="${c:l('p.material.used')}"></button>
+	<button label="${c:l('p.keyinout.confirm')}" onClick="@command('onConfirm', resultListbox=resultListbox)" sclass="buttonSpace"></button>
+</div>
+</div>
+</north>
+<center>
+<listbox id="resultListbox" width="100%" vflex="true" model="@load(vm.result)" 
+	multiple="true" checkmark="true">
+	<listhead>
+		<listheader width="30px" align="center"></listheader>
+		<listheader label="SN" sort="auto(sn)"></listheader>
+		<listheader label="${c:l('hard.level')}"></listheader>
+		<listheader label="${c:l('rma.no')}" sort="auto(order.rma)"></listheader>
+		<listheader label="PN"></listheader>
+		<listheader label="${c:l('flow.status')}"></listheader>
+		<listheader label="${c:l('p.final.result')}"></listheader>
+		<listheader label="${c:l('p.material.used')}"></listheader>
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell></listcell>
+			<listcell label="@load(item.sn)"></listcell>
+			<listcell label="@load(item.hardLevel)"></listcell>
+			<listcell label="@load(item.order.rma)"></listcell>
+			<listcell label="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')"></listcell>
+			<listcell label="@load(item.status)"></listcell>
+			<listcell label="@load(item.finalResult)"></listcell>
+			<listcell label="@load(item.materialUsed)"></listcell>
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+</zk>

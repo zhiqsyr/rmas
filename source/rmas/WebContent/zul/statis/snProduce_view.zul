@@ -1,0 +1,41 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window width="70%" apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.statis.SnProduceViewVM')">
+	
+	<div align="center">
+		<label value="${c:l('circulation.details')}" style="font-size:10pt;font-weight:bold;"></label>
+		<separator height="10px"></separator>
+	</div>
+	
+	<listbox width="100%" mold="paging" pageSize="10"
+		model="@load(vm.result)">
+		<listhead>
+			<listheader label="${c:l('link')}" width="100px"></listheader>
+			<listheader label="${c:l('result')}" width="125px"></listheader>
+			<listheader label="${c:l('remarks')}"></listheader>
+			<listheader label="${c:l('personnel')}" width="150px"></listheader>
+			<listheader label="${c:l('time')}" width="125px"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.produceType)"></listcell>
+				<listcell label="@load(item.result)"></listcell>
+				<listcell>
+					<label value="@load(item.resultRemark)" sclass="texthidenstyle"
+						tooltiptext="@load(item.resultRemark)"></label>
+				</listcell>
+				<listcell label="@load(item.producer) @converter('com.dl.rmas.web.converter.UserIdConverter')"></listcell>
+				<listcell label="@load(item.endTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+	
+	<div sclass="submitButtonDiv">
+		<button image="/common/images/stop.gif" label="${c:l('closebutton')}" onClick="spaceOwner.detach()"></button>
+	</div>
+	
+</window>
+</zk>

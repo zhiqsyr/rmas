@@ -1,0 +1,47 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('p.edit.imei')}" border="normal" width="60%"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.ImeiEditVM')">
+	<grid>
+		<columns>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('rma.no')}"></label>
+				<label value="@bind(vm.edit.order.rma)"></label>
+				<label value="${c:l('rma.index')}"></label>
+				<label value="@bind(vm.edit.snIndex)"></label>				
+			</row>
+			<row>
+				<label value="PN"></label>
+				<label value="@bind(vm.edit.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')"></label>		
+				<label value="SN"></label>
+				<label value="@bind(vm.edit.sn)"></label>		
+			</row>			
+			<row>
+				<label value="IMEI1："></label>
+				<label value="@bind(vm.edit.macImei1)"></label>
+				<label value="NEW IMEI1："></label>
+				<textbox value="@bind(vm.edit.macImei1N)"></textbox>				
+			</row>
+			<row>
+				<label value="IMEI2："></label>
+				<label value="@bind(vm.edit.macImei2)"></label>
+				<label value="NEW IMEI2："></label>
+				<textbox value="@bind(vm.edit.macImei2N)"></textbox>				
+			</row>			
+		</rows>
+	</grid>
+	
+	<div sclass="submitButtonDiv">
+		<button label="${c:l('p.save')}" image="/common/images/itemConfirm.gif" onClick="@command('onSave')"></button>
+		<button label="${c:l('p.close')}" image="/common/images/stop.gif" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+	</div>
+</window>
+</zk>

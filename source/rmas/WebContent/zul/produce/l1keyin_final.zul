@@ -1,0 +1,45 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('p.stop.repair')}" width="60%"
+	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.L1keyinFinalVM')">
+	
+<grid>
+	<columns>
+		<column width="25%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('p.final.result')}"></label>
+			</span>
+			<listbox mold="select"
+				model="@load(vm.finalResultLabelValueBeans)"
+				selectedItem="@bind(vm.selected.finalResult) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+				<template name="model" var="item">
+					<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+				</template>
+			</listbox>
+		</row>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('p.reason')}"></label>
+			</span>
+			<textbox value="@load(vm.selected.stopReason) @save(vm.selected.stopReason, before='onSubmit')" 
+				rows="3" constraint="no empty"></textbox>
+		</row>
+	</rows>
+</grid>
+	
+<div sclass="submitButtonDiv">
+	<button image="/common/images/itemConfirm.gif" label="${c:l('p.confirm')}" onClick="@command('onSubmit')" disabled="@load(empty vm.selected.finalResult)"></button>
+	<button image="/common/images/stop.gif" label="${c:l('p.close')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+
+</window>
+</zk>

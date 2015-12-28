@@ -1,0 +1,96 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.order.OrderRmaCreateVM')">
+<north>
+<div>
+<groupbox mold="3d">
+	<caption label="${c:l('create.order')}"></caption>
+	<div align="center">
+		<label value="${c:l('customer.companyname')}"></label>
+		<listbox mold="select" width="240px"
+			model="@load(vm.customerLabelValueBeans)"
+			selectedItem="@bind(vm.order.customerId) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+			<template name="model" var="item">
+				<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+			</template>
+		</listbox>
+		<button image="/common/images/itemConfirm.gif" label="${c:l('generate.rma.no')}" style="margin-left:10px"
+			onClick="@command('onSubmit')" disabled="@load(empty vm.order.customerId)"></button>
+	</div>
+</groupbox>
+<groupbox mold="3d">
+	<caption label="${c:l('order.query')}"></caption>
+	<grid>
+		<columns>
+			<column width="13%" align="right"></column>
+			<column width="33%"></column>
+			<column width="13%" align="right"></column>
+			<column></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('rma.no')}"></label>
+				<textbox value="@bind(vm.queryOrder.rma)"></textbox>
+				<label value="${c:l('receive.status')}"></label>
+				<listbox mold="select" model="@load(vm.receiveStatusLabelValueBeans)"
+					selectedItem="@bind(vm.queryOrder.receiveStatus) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+			</row>
+			<row>
+				<label value="${c:l('generate.person')}"></label>
+				<textbox value="@bind(vm.queryOrder.receiverName)"></textbox>
+				<label value="${c:l('generate.date')}"></label>
+				<hbox>
+					<datebox value="@bind(vm.queryOrder.receiveTimeFrom)"></datebox>
+					~
+					<datebox value="@bind(vm.queryOrder.receiveTimeTo)"></datebox>
+					<button image="/common/images/search.gif" label="${c:l('search')}" style="margin-left:15px" onClick="@command('onSearch')" ></button>
+				</hbox>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<div sclass="centerButtonDiv">
+	<button image="/common/images/itemEdit.gif" label="${c:l('entrybutton')}" 
+		onClick="@command('onShowEdit')"></button>
+	<button image="/common/images/itemRemove.gif" label="Delete" style="margin-left:10px"
+		visible="@load(vm.isAdmin)" disabled="@load(empty vm.selected)"
+		onClick="@command('onDelete')"></button>
+</div>
+</div>
+</north>
+<center>
+<listbox width="100%" vflex="true"
+	model="@load(vm.result)" selectedItem="@bind(vm.selected)">
+	<listhead>
+		<listheader label="${c:l('rma.no')}" sort="auto(rma)" 
+				onSort="@command('onSort', prop='rma', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('receive.status')}" sort="auto(receiveStatus)" 
+				onSort="@command('onSort', prop='receiveStatus', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('generate.person')}" sort="auto(receiver)" 
+				onSort="@command('onSort', prop='receiver', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('generate.date')}" sort="auto(receiveTime)" 
+				onSort="@command('onSort', prop='receiveTime', ascending=event.ascending)"></listheader>
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell label="@load(item.rma)"></listcell>
+			<listcell label="@load(item.receiveStatus) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>
+			<listcell label="@load(item.receiver) @converter('com.dl.rmas.web.converter.UserIdConverter')"></listcell>
+			<listcell label="@load(item.receiveTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"></listcell>
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+</zk>

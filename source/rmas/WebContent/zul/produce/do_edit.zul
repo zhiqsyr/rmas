@@ -1,0 +1,106 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<!-- 出货 -->
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.DoEditVM')">
+<north>
+<div>
+<groupbox>
+	<caption label="DO"></caption>
+	<grid>
+		<columns>
+			<column width="10%" align="right"></column>
+			<column width="23%"></column>
+			<column width="10%" align="right"></column>
+			<column width="23%"></column>
+			<column width="10%" align="right"></column>
+			<column width="24%"></column>			
+		</columns>
+		<rows>
+			<row spans="6">
+				<div align="center">
+					<label value="SN"></label>
+					<space></space>
+					<textbox value="@bind(vm.snDto.sn)" width="20%"></textbox>
+					<space></space>
+					<button image="/common/images/itemAdd.gif" label="Add" onClick="@command('onAdd')"></button>
+					<space></space>
+					<button image="/common/images/itemNopass.gif" label="Clear" onClick="@command('onClear')"></button>
+				</div>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<div sclass="centerButtonDiv">
+	<button image="/common/images/itemAdd.gif" label="${c:l('p.generate.do.form')}" onClick="@command('onCreateRMA')"></button>
+	<button image="/common/images/return.png" label="Return to QC" sclass="buttonSpace" visible="@load(vm.returnBtnVisible)" onClick="@command('onReturnQC')"></button>
+</div>
+</div>
+</north>
+<center>
+<listbox id="resultListbox" width="100%" vflex="true" 
+	mold="paging" pageSize="20" rows="20"
+	model="@load(vm.result)" selectedItem="@save(vm.selected)">
+	<listhead>
+		<listheader label="${c:l('p.operation')}" width="70px" align="center"></listheader>		
+		<listheader label="SN" width="190px"></listheader>
+		<listheader label="${c:l('rma.no')}" width="130px"></listheader>
+		<listheader label="${c:l('rma.index')}" width="80px"></listheader>
+		<listheader label="PN" width="120px"></listheader>
+		<listheader label="${c:l('p.final.result')}" width="90px"></listheader>
+		<listheader label="${c:l('p.material.used')}" width="100px"></listheader>
+		<listheader label="IMEI1" width="110px"></listheader>
+		<listheader label="New IMEI1" width="110px"></listheader>				
+		<listheader label="IMEI2" width="110px"></listheader>		
+		<listheader label="New IMEI2" width="110px"></listheader>							
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell>
+				<toolbarbutton image="/common/images/itemRemove.gif" tooltiptext="Remove" onClick="@command('onRemove', sn=item)"></toolbarbutton>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.sn)" tooltiptext="@load(item.sn)" sclass="texthidenstyle"></label>			
+			</listcell>
+			<listcell>
+				<label value="@load(item.order.rma)" tooltiptext="@load(item.order.rma)" sclass="texthidenstyle"></label>		
+			</listcell>
+			<listcell label="@load(item.snIndex)"></listcell>
+			<listcell>
+				<label value="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')" 
+					tooltiptext="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')" 
+					sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.finalResult)" 
+					tooltiptext="@load(item.finalResult)" 
+					sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell label="@load(item.materialUsed) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>
+			<listcell>
+				<label value="@load(item.macImei1)" tooltiptext="@load(item.macImei1)" sclass="texthidenstyle"></label>	
+			</listcell>
+			<listcell>
+				<label value="@load(item.macImei1N)" tooltiptext="@load(item.macImei1N)" sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.macImei2)" tooltiptext="@load(item.macImei2)" sclass="texthidenstyle"></label>
+			</listcell>			
+			<listcell>
+				<label value="@load(item.macImei2N)" tooltiptext="@load(item.macImei2N)" sclass="texthidenstyle"></label>
+			</listcell>				
+		</listitem>
+	</template>
+</listbox>
+</center>
+<!-- 
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+ -->
+</borderlayout>
+</zk>

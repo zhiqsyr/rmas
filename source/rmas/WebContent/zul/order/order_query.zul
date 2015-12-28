@@ -1,0 +1,133 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.order.OrderQueryVM')">
+<north>
+<div>
+<groupbox>
+	<caption label="${c:l('order.query')}"></caption>
+	<grid>
+		<columns>
+			<column width="12%" align="right"></column>
+			<column width="33%"></column>
+			<column width="12%" align="right"></column>
+			<column width="43%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('rma.no')}"></label>
+				<textbox value="@bind(vm.queryOrder.rma)"></textbox>
+				<label value="${c:l('customer.order.no')}"></label>
+				<textbox value="@bind(vm.queryOrder.custrma)"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('customer.companyname')}"></label>
+				<listbox mold="select"
+					model="@load(vm.customerLabelValueBeans)"
+					selectedItem="@bind(vm.queryOrder.customerId) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+				<label value="${c:l('express.company')}"></label>
+				<textbox value="@bind(vm.queryOrder.expressCom)"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('express.number')}"></label>
+				<textbox value="@bind(vm.queryOrder.expressNo)"></textbox>
+				<label value="${c:l('receive.person')}"></label>
+				<textbox value="@bind(vm.queryOrder.receiverName)"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('receive.date')}"></label>
+				<hbox>
+					<datebox value="@bind(vm.queryOrder.receiveTimeFrom)"></datebox>
+					~
+					<datebox value="@bind(vm.queryOrder.receiveTimeTo)"></datebox>
+				</hbox>
+				<label value="${c:l('receive.status')}"></label>
+				<span>
+					<listbox width="35%" mold="select" model="@load(vm.receiveStatusLabelValueBeans)"
+						selectedItem="@bind(vm.queryOrder.receiveStatus) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+						<template name="model" var="item">
+							<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+						</template>
+					</listbox>
+					<button image="/common/images/xls.png" label="Export" style="margin-left:18px"
+						onClick="@command('onExport')"></button>					
+					<button image="/common/images/search.gif" label="${c:l('search')}" 
+						style="margin-left:15px"
+						onClick="@command('onSearch')"></button>
+				</span>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<div sclass="centerButtonDiv">
+	<button image="/common/images/itemEdit.gif"  label="${c:l('modifybutton')}" onClick="@command('onShowEdit')" disabled="@load(empty vm.selected)"></button>
+</div>
+</div>
+</north>
+<center>
+<listbox width="100%" vflex="true"
+	model="@load(vm.result)" selectedItem="@bind(vm.selected)">
+	<listhead>
+		<listheader label="${c:l('rma.no')}" width="130px" sort="auto(rma)" 
+				onSort="@command('onSort', prop='rma', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.companyname')}" width="165px" sort="auto(customerId)" 
+				onSort="@command('onSort', prop='customerId', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.order.no')}" width="140px" sort="auto(custrma)" 
+				onSort="@command('onSort', prop='custrma', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('express.company')}" width="130px" sort="auto(expressCom)" 
+				onSort="@command('onSort', prop='expressCom', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('express.number')}" width="130px" sort="auto(expressNo)" 
+				onSort="@command('onSort', prop='expressNo', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('receipt.numberofbox')}" width="145px" sort="auto(boxes)" 
+				onSort="@command('onSort', prop='boxes', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('receive.person')}" width="110px" sort="auto(receiver)" 
+				onSort="@command('onSort', prop='receiver', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('receive.date')}" width="140px" sort="auto(receiveTime)" 
+				onSort="@command('onSort', prop='receiveTime', ascending=event.ascending)"></listheader>
+		<listheader label="Remarks" width="180px"/>
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell>
+				<label value="@load(item.rma)" tooltiptext="@load(item.rma)" sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.customerId) @converter('com.dl.rmas.web.converter.CustomerIdConverter')"
+					tooltiptext="@load(item.customerId) @converter('com.dl.rmas.web.converter.CustomerIdConverter')"
+					sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.custrma)" tooltiptext="@load(item.custrma)" sclass="texthidenstyle"></label>				
+			</listcell>
+			<listcell>
+				<label value="@load(item.expressCom)" tooltiptext="@load(item.expressCom)" sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.expressNo)" tooltiptext="@load(item.expressNo)" sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell label="@load(item.boxes)"></listcell>
+			<listcell>
+				<label value="@load(item.receiver) @converter('com.dl.rmas.web.converter.UserIdConverter')" 
+					tooltiptext="@load(item.receiver) @converter('com.dl.rmas.web.converter.UserIdConverter')" 
+					sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell label="@load(item.receiveTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"></listcell>
+			<listcell>
+				<label value="@load(item.remarks)" tooltiptext="@load(item.remarks)" sclass="texthidenstyle"></label>
+			</listcell>			
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+</zk>

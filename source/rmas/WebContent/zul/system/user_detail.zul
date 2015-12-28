@@ -1,0 +1,65 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="detailWin" title="${c:l('personalcenter')}" width="40%" border="normal"
+	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.UserDetailVM')">
+<grid style="border:0px">
+	<columns>
+		<column width="35%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<label value="${c:l('user.number')}"></label>
+			<hbox>
+				<label value="@load(vm.user.userNo)"></label>
+				<a label="${c:l('modify.password')}" style="margin-left:30px;color:blue" onClick="@command('onShowUserPasswordEdit')"></a>
+			</hbox>
+		</row>
+		<row>
+			<label value="${c:l('user.name')}"></label>
+			<label value="@load(vm.user.userName)"></label>
+		</row>
+		<row>
+			<label value="${c:l('user.phone')}"></label>
+			<label value="@load(vm.user.phone)"></label>
+		</row>
+		<row>
+			<label value="${c:l('user.address')}"></label>
+			<label value="@load(vm.user.address)"></label>
+		</row>
+		<row>
+			<label value="${c:l('user.email')}"></label>
+			<label value="@load(vm.user.email)"></label>
+		</row>
+		<row>
+			<label value="${c:l('user.education')}"></label>
+			<label value="@load(vm.user.education)"></label>
+		</row>
+		<row>
+			<label value="${c:l('user.deptname')}"></label>
+			<label value="@load(vm.user.deptName)"></label>
+		</row>
+		<row>
+			<label value="${c:l('user.post')}"></label>
+			<label value="@load(vm.user.post)"></label>
+		</row>
+		<row>
+			<label value="${c:l('user.careerlevel')}"></label>
+			<label value="@load(vm.user.careerLevel)"></label>
+		</row>
+		<row>
+			<label value="${c:l('user.validity')}"></label>
+			<label value="@load(vm.user.validity) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></label>
+		</row>
+	</rows>
+</grid>
+
+<div sclass="submitButtonDiv">
+	<button image="/common/images/itemEdit.gif" label="${c:l('modifybutton')}" onClick="@command('onShowEditWin')"></button>
+	<button image="/common/images/stop.gif" label="${c:l('closebutton')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+</window>
+</zk>

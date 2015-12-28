@@ -1,0 +1,49 @@
+/* 查询按钮 */
+.searchButtonDiv{
+	text-align: right;
+	margin-right: 50px;
+}
+
+.centerButtonDiv{
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+/* 确认等按钮 */
+.submitButtonDiv{
+	text-align: center;
+	margin-top: 50px;
+	margin-bottom: 10px;
+}
+
+/* 提醒标签 */
+.warnLabel{
+	margin-left: 10px;
+	font-size: 10px;
+	color: red;
+}
+
+/* 按钮间距 */
+.buttonSpace{
+	margin-left: 20px;
+}
+
+.leftMenuTree {
+	background:transparent;
+	overflow:auto;
+	
+	margin:0px auto;
+	border:0px solid #dfedf0;
+}
+
+/* text */
+.texthidenstyle {
+	width: 100%;
+	white-space: nowrap;
+	display: block;
+	overflow: hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	-moz-binding: url('ellipsis.xml#ellipsis');
+}

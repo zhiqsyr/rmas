@@ -1,0 +1,329 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.ProduceQueryVM')">
+<north>
+<div>
+	<groupbox>
+		<caption label="${c:l('comprehensive.serach')}"></caption>
+		<grid>
+			<columns>
+				<column width="14%" align="right"></column>
+				<column></column>
+				<column width="11%" align="right"></column>
+				<column width="22%"></column>
+				<column width="11%" align="right"></column>
+				<column width="22%"></column>
+			</columns>
+			<rows>
+				<row>
+					<label value="${c:l('customer.order.no')}"></label>
+					<textbox value="@bind(vm.snDto.custrma)"></textbox>
+					<label value="${c:l('rma.no')}"></label>
+					<textbox value="@bind(vm.snDto.rma)"></textbox>
+					<label value="SN"></label>
+					<textbox value="@bind(vm.snDto.sn)"></textbox>
+				</row>
+				<row>
+					<label value="PN"></label>
+					<textbox value="@bind(vm.snDto.pn)"></textbox>
+					<label value="${c:l('receive.date')}"></label>
+					<hbox>
+						<datebox value="@bind(vm.snDto.receiveDateFrom)" width="80%"></datebox>
+						~
+						<datebox value="@bind(vm.snDto.receiveDateTo)" width="80%"></datebox>
+					</hbox>
+					<label value="${c:l('rma.status')}"></label>
+					<listbox mold="select"
+						model="@load(vm.typeStatusLabelValueBeans)"
+						selectedItem="@bind(vm.snDto.keyinStatus) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+						<template name="model" var="item">
+							<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+						</template>
+					</listbox>					
+				</row>
+				<row>
+					<label value="Re-service Status"></label>
+					<listbox mold="select" model="@load(vm.keepStatusLabelValueBeans)"
+						selectedItem="@bind(vm.snDto.keepStatus) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+						<template name="model" var="item">
+							<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+						</template>
+					</listbox>					
+					<label value="${c:l('data.entering.person')}"></label>
+					<textbox value="@bind(vm.snDto.createUserName)"></textbox>
+					<label value="${c:l('hard.level')}"></label>
+					<intbox value="@bind(vm.snDto.hardLevel)"></intbox>
+				</row>
+				<row>
+					<label value="${c:l('keyin.date')}"></label>
+					<hbox>
+						<datebox value="@bind(vm.snDto.createTimeFrom)" width="80%"></datebox>
+						~
+						<datebox value="@bind(vm.snDto.createTimeTo)" width="80%"></datebox>
+					</hbox>				
+					<label value="${c:l('close.date')}"></label>
+					<hbox>
+						<datebox value="@bind(vm.snDto.closeDateFrom)" width="80%"></datebox>
+						~
+						<datebox value="@bind(vm.snDto.closeDateTo)" width="80%"></datebox>
+					</hbox>
+					<label value="${c:l('do.date')}"></label>
+					<hbox>
+						<datebox value="@bind(vm.snDto.doTimeFrom)" width="80%"></datebox>
+						~
+						<datebox value="@bind(vm.snDto.doTimeEnd)" width="80%"></datebox>
+					</hbox>					
+				</row>
+				<row>
+					<label value="${c:l('flow.status')}"></label>
+					<listbox mold="select"
+						model="@load(vm.snStatusLabelValueBeans)"
+						selectedItem="@bind(vm.snDto.status) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+						<template name="model" var="item">
+							<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+						</template>
+					</listbox>				
+					<label value="DO Result"></label>
+					<listbox mold="select"
+						model="@load(vm.finalResultLabelValueBeans)"
+						selectedItem="@bind(vm.snDto.finalResult) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+						<template name="model" var="item">
+							<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+						</template>
+					</listbox>		
+					<label value="SN DO Status"></label>
+					<listbox mold="select"
+						model="@load(vm.rmaDoStatusLabelValueBeans)"
+						selectedItem="@bind(vm.snDto.snDoStatus) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+						<template name="model" var="item">
+							<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+						</template>
+					</listbox>
+				</row>
+				<row spans="1,1,1,1,2">
+					<label value="IMEI1"></label>
+					<textbox value="@bind(vm.snDto.macImei1)"></textbox>					
+					<label value="New IMEI1"></label>
+					<textbox value="@bind(vm.snDto.macImei1N)"></textbox>		
+					<div sclass="searchButtonDiv">
+						<button image="/common/images/xls.png" label="Export to Excel" onClick="@command('onExport')"></button>
+						<button image="/common/images/search.gif" sclass="buttonSpace" label="${c:l('search')}" onClick="@command('onSearch')"></button>	
+					</div>				
+				</row>
+			</rows>
+		</grid>
+	</groupbox>
+</div>
+</north>
+<center>
+<listbox width="100%" vflex="true"
+	model="@load(vm.result)">
+	<listhead>
+		<listheader label="${c:l('data.entering.person')}" width="85px" sort="auto(createUser)" 
+				onSort="@command('onSort', prop='createUser', ascending=event.ascending)"></listheader>	
+		<listheader label="${c:l('customer.order.no')}" width="125px" sort="auto(order.custrma)" 
+				onSort="@command('onSort', prop='order.custrma', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('rma.no')}" width="125px" sort="auto(order.rma)" 
+				onSort="@command('onSort', prop='order.rma', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('rma.index')}" width="70px" sort="auto(snIndex)" 
+				onSort="@command('onSort', prop='snIndex', ascending=event.ascending)"></listheader>
+		<listheader label="SN" width="180px" sort="auto(sn)" 
+				onSort="@command('onSort', prop='sn', ascending=event.ascending)"></listheader>
+		<listheader label="PN" width="120px" sort="auto(productId)" 
+				onSort="@command('onSort', prop='productId', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('rma.status')}" width="110px" sort="auto(order.keyinStatus)" 
+				onSort="@command('onSort', prop='order.keyinStatus', ascending=event.ascending)"></listheader>
+		<listheader label="SN DO Status" width="90px"></listheader>					
+		<listheader label="${c:l('hard.level')}" width="75px" sort="auto(hardLevel)" 
+				onSort="@command('onSort', prop='hardLevel', ascending=event.ascending)"></listheader>				
+		<listheader label="${c:l('receive.date')}" width="82px" sort="auto(order.receiveTime)" 
+				onSort="@command('onSort', prop='order.receiveTime', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('keyin.date')}" width="80px" sort="auto(createTime)" 
+				onSort="@command('onSort', prop='createTime', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('l1keyin.date')}" width="100px"></listheader>
+		<listheader label="${c:l('repair.date')}" width="90px"></listheader>
+		<listheader label="${c:l('qc.date')}" width="80px"></listheader>				
+		<listheader label="${c:l('do.date')}" width="80px" sort="auto(doTime)" 
+				onSort="@command('onSort', prop='doTime', ascending=event.ascending)"></listheader>				
+		<listheader label="${c:l('close.date')}" width="90px" sort="auto(order.closeTime)" 
+				onSort="@command('onSort', prop='order.closeTime', ascending=event.ascending)"></listheader>		
+		<listheader label="${c:l('flow.status')}" width="90px" sort="auto(status)"
+				onSort="@command('onSort', prop='status', ascending=event.ascending)"></listheader>				
+		<listheader label="${c:l('flash.engineer')}" width="100px"></listheader>
+		<listheader label="${c:l('flash.engineer.no')}" width="130px"></listheader>
+		<listheader label="${c:l('flash.result')}" width="100px"></listheader>
+		<listheader label="${c:l('repair.engineer')}" width="100px"></listheader>
+		<listheader label="${c:l('repair.engineer.no')}" width="130px"></listheader>				
+		<listheader label="${c:l('repair.code')}" width="80px"></listheader>
+		<listheader label="${c:l('repair.code.remark')}" width="130px"></listheader>		
+		<listheader label="${c:l('repair.result')}" width="100px"></listheader>		
+		<listheader label="${c:l('qc.engineer')}" width="100px"></listheader>		
+		<listheader label="${c:l('qc.engineer.no')}" width="105px"></listheader>		
+		<listheader label="${c:l('qc.result')}" width="100px"></listheader>
+		<listheader label="Stoper Name" width="100px"></listheader>
+		<listheader label="Stoper No." width="100px"></listheader>
+		<listheader label="DO Result" width="100px"></listheader>
+		<listheader label="Stop Reason" width="115px"></listheader>
+		<listheader label="${c:l('re-service.status')}" width="110px"></listheader>								
+		<listheader label="IMEI1" width="100px" sort="auto(macImei1)" 
+				onSort="@command('onSort', prop='macImei1', ascending=event.ascending)"></listheader>
+		<listheader label="New IMEI1" width="100px"></listheader>				
+		<listheader label="IMEI2" width="100px" sort="auto(macImei2)" 
+				onSort="@command('onSort', prop='macImei2', ascending=event.ascending)"></listheader>		
+		<listheader label="New IMEI2" width="100px"></listheader>
+		<listheader label="CID Type" width="100px"></listheader>
+		<listheader label="Customer Fault Desc" width="130px"></listheader>
+		<listheader label="Outlet" width="80px"></listheader>
+		<listheader label="Fail Code" width="80px"></listheader>
+		<listheader label="Case Id" width="90px"></listheader>
+		<listheader label="Remark" width="110px"></listheader>				
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell>
+				<label value="@load(item.createUser) @converter('com.dl.rmas.web.converter.UserIdConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.createUser) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.order.custrma)" tooltiptext="@load(item.order.custrma)"
+					sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.order.rma)" 
+					tooltiptext="@load(item.order.rma)" sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell label="@load(item.snIndex)"></listcell>
+			<listcell>
+				<label value="@load(item.sn)" tooltiptext="@load(item.sn)" sclass="texthidenstyle"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')"></label>
+			</listcell>
+			<listcell label="@load(item.order.keyinStatus) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>			
+			<listcell label="@load(item.snDoStatus)"></listcell>
+			<listcell label="@load(item.hardLevel)"></listcell>			
+			<listcell label="@load(item.order.receiveTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.createTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.assignTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.repairedTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.qcTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.doTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.order.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>			
+			<listcell label="@load(item.status) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>			
+			<listcell>
+				<label value="@load(item.flasher) @converter('com.dl.rmas.web.converter.UserIdConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.flasher) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.flasher) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.flasher) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"></label>
+			</listcell>		
+			<listcell label="@load(item.flashResult)"></listcell>			
+			<listcell>
+				<label value="@load(item.repairer) @converter('com.dl.rmas.web.converter.UserIdConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.repairer) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.repairer) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.repairer) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"></label>
+			</listcell>					
+			<listcell>
+				<label value="@load(item.repairCode) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.repairCode) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')"></label>
+			</listcell>			
+			<listcell>
+				<label value="@load(item.repairRemark)" sclass="texthidenstyle" tooltiptext="@load(item.repairRemark)"></label>
+			</listcell>
+			<listcell label="@load(item.repairResult)"></listcell>			
+			<listcell>
+				<label value="@load(item.qcer) @converter('com.dl.rmas.web.converter.UserIdConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.qcer) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.qcer) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.qcer) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"></label>
+			</listcell>
+			<listcell label="@load(item.qcResult)"></listcell>
+			<listcell>
+				<label value="@load(item.stoper) @converter('com.dl.rmas.web.converter.UserIdConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.stoper) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.stoper) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.stoper) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"></label>
+			</listcell>			
+			<listcell label="@load(item.finalResult)"></listcell>
+			<listcell>
+				<label value="@load(item.stopReason)"
+					sclass="texthidenstyle"
+					tooltiptext="@load(item.stopReason)"></label>
+			</listcell>			
+			<listcell>
+				<label value="@load(item.keepStatus)" sclass="texthidenstyle" tooltiptext="@load(item.keepStatus)"></label>
+			</listcell>			
+			<listcell>
+				<label value="@load(item.macImei1)" sclass="texthidenstyle" tooltiptext="@load(item.macImei1)"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.macImei1N)" sclass="texthidenstyle" tooltiptext="@load(item.macImei1N)"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.macImei2)" sclass="texthidenstyle" tooltiptext="@load(item.macImei2)"></label>
+			</listcell>			
+			<listcell>
+				<label value="@load(item.macImei2N)" sclass="texthidenstyle" tooltiptext="@load(item.macImei2N)"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.cidType) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.cidType) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.customerFaultDesc) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.customerFaultDesc) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.outlet) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.outlet) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.failCode)" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.failCode)"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.caseId)" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.caseId)"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.remark)" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.remark)"></label>
+			</listcell>																
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+</zk>

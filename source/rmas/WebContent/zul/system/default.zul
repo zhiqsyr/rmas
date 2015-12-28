@@ -1,0 +1,10 @@
+<?page contentType="text/html;charset=UTF-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk>
+<borderlayout>
+<center>
+	<label value="default"></label>
+</center>
+</borderlayout>
+</zk>

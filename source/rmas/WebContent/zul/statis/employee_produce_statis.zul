@@ -1,0 +1,139 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.statis.EmployeeProduceStatisVM')">
+<north>
+<div>
+	<groupbox>
+		<caption label="${c:l('employee.benefit.statistic')}"></caption>
+		<grid>
+			<columns>
+				<column width="15%" align="right"></column>
+				<column width="35%"></column>
+				<column width="15%" align="right"></column>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<label value="${c:l('employee.number')}"></label>
+					<textbox value="@bind(vm.query.employeeNo)"></textbox>
+					<label value="${c:l('employee.name')}"></label>
+					<textbox value="@bind(vm.query.employeeName)"></textbox>
+				</row>
+				<row spans="1,1,2">
+					<label value="${c:l('time')}"></label>
+					<hbox>
+						<datebox value="@bind(vm.query.endTimeFrom)"></datebox>
+						~
+						<datebox value="@bind(vm.query.endTimeTo)"></datebox>
+					</hbox>
+					<div sclass="searchButtonDiv">
+						<button image="/common/images/xls.png" label="Export to Excel" onClick="@command('onExport')"></button>
+						<button image="/common/images/search.gif" label="${c:l('search')}" sclass="buttonSpace" onClick="@command('onSearch')" ></button>
+					</div>
+				</row>
+			</rows>
+		</grid>
+	</groupbox>
+</div>
+</north>
+<center>
+	<listbox width="100%" vflex="true" 
+		model="@load(vm.result)">
+		<auxhead>
+			<auxheader colspan="4"></auxheader>
+			<auxheader colspan="3" label="Flash" align="center"></auxheader>
+			<auxheader colspan="2"></auxheader>
+			<auxheader colspan="3" label="Repair" align="center"></auxheader>
+			<auxheader colspan="3" label="QC" align="center"></auxheader>
+			<auxheader colspan="2" label="OQC" align="center"></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<listhead>
+			<listheader label="${c:l('employee.number')}" width="130px"></listheader>
+			<listheader label="${c:l('employee.name')}" width="130px"></listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='KEYIN')" label="Keyin"></a>
+			</listheader>
+			<listheader width="100px" align="center">
+				<a onClick="@command('onExportDetail', produceType='MIDH')" label="L1keyin Midh"></a>
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='FLASH')" label="Flash OK"></a>
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='FLASH_NG')" label="Flash NG"></a>
+			</listheader>
+			<listheader label="Flash Pass Rate" width="110px" align="center">
+			</listheader>
+			<listheader width="100px" align="center">
+				<a onClick="@command('onExportDetail', produceType='L1KEYIN')" label="L1keyin Other"></a>
+			</listheader>
+			<listheader width="115px" align="center">
+				<a onClick="@command('onExportDetail', produceType='STOP_REPAIR')" label="Stop Repair"></a>
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='REPAIR')" label="Repair OK"></a>
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='REPAIR_NG')" label="Repair NG"></a>
+			</listheader>
+			<listheader label="Repair Pass Rate" width="110px" align="center">
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='QC')" label="QC OK"></a>
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='QC_NG')" label="QC NG"></a>
+			</listheader>
+			<listheader label="QC Pass Rate" width="110px" align="center">
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='OQC_OK')" label="OQC OK"></a>
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='OQC_NG')" label="OQC NG"></a>
+			</listheader>
+			<listheader width="90px" align="center">
+				<a onClick="@command('onExportDetail', produceType='DO')" label="DO"></a>
+			</listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell>
+					<label value="@load(item.userNo)" tooltiptext="@load(item.userNo)" 
+						sclass="texthidenstyle"></label>
+				</listcell>
+				<listcell>
+					<label value="@load(item.userName)" tooltiptext="@load(item.userName)"
+						sclass="texthidenstyle"></label>
+				</listcell>
+				<listcell label="@load(item.keyinCount)"></listcell>
+				<listcell label="@load(item.midhCount)"></listcell>
+				<listcell label="@load(item.flashCount)"></listcell>
+				<listcell label="@load(item.flashNgCount)"></listcell>
+				<listcell label="@load(item.flashPassRate) @converter('org.zkoss.bind.converter.FormatedNumberConverter', format='##.##%')"></listcell>
+				<listcell label="@load(item.l1keyinCount)"></listcell>
+				<listcell label="@load(item.stopRepairCount)"></listcell>
+				<listcell label="@load(item.repairCount)"></listcell>
+				<listcell label="@load(item.repairNgCount)"></listcell>
+				<listcell label="@load(item.repairPassRate) @converter('org.zkoss.bind.converter.FormatedNumberConverter', format='##.##%')"></listcell>
+				<listcell label="@load(item.qcCount)"></listcell>
+				<listcell label="@load(item.qcNgCount)"></listcell>
+				<listcell label="@load(item.qcPassRate) @converter('org.zkoss.bind.converter.FormatedNumberConverter', format='##.##%')"></listcell>
+				<listcell label="@load(item.oqcCount)"></listcell>
+				<listcell label="@load(item.oqcNgCount)"></listcell>
+				<listcell label="@load(item.doCount)"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>	
+</south>
+</borderlayout>
+</zk>

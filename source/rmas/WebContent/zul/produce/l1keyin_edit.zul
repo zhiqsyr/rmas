@@ -1,0 +1,68 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('p.assign.task')}" width="60%"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.L1keyinEditVM')">
+
+<div align="center" style="margin-top:10px">
+	<label value="${c:l('p.assign.to')}"></label>
+	<!-- 
+	<listbox mold="select" width="30%" style="margin-left:25px"
+		model="@load(vm.usersLabelValueBeans)"
+		selectedItem="@bind(vm.selectedUserId) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+		<template name="model" var="item">
+			<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+		</template>
+	</listbox>
+	 -->
+	<bandbox id="bb" onChanging="@command('onListUsers', _4Pre=event.value)" width="300px"
+		style="text-transform:uppercase;" value="@bind(vm.selectedUserId) @converter('com.dl.rmas.web.converter.UserIdNoNameConverter')"
+	    buttonVisible="true" autodrop="true">
+		<bandpopup height="300px">
+			<vbox width="300px">
+				<listbox id="sltLb" width="100%" 
+					mold="paging" pageSize="10"
+					model="@load(vm._4Slts)" onSelect="@command('onSlt', sltLb=sltLb, bb=bb)">
+					<listhead>
+						<listheader label="User No." width="35%"></listheader>
+						<listheader label="User Name" width="65%"></listheader>
+					</listhead>
+					<template name="model" var="item">
+						<listitem>
+							<listcell>
+								<label value="@load(item.userNo)" sclass="texthidenstyle" tooltiptext="@load(item.userNo)"></label>
+							</listcell>
+							<listcell>
+								<label value="@load(item.userName)" sclass="texthidenstyle" tooltiptext="@load(item.userName)"></label>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</vbox>									
+		</bandpopup>
+	</bandbox>		
+</div>
+<groupbox style="margin-top:20px">
+	<caption label="${c:l('p.current.task.statis')}"></caption>
+	<listbox width="100%" mold="paging" pageSize="8" model="@load(vm.repairingDtos)">
+		<listhead>
+			<listheader label="${c:l('p.employee.no')}"></listheader>
+			<listheader label="${c:l('p.employee.name')}"></listheader>
+			<listheader label="${c:l('p.employee.repairing.count')}"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.userNo)"></listcell>
+				<listcell label="@load(item.userName)"></listcell>
+				<listcell label="@load(item.repairingCount)"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+</groupbox>
+<div align="center" style="margin-top:20px;margin-bottom:10px">
+	<button image="/common/images/itemConfirm.gif" label="${c:l('p.confirm')}" onClick="@command('onSubmit')" disabled="@load(empty vm.selectedUserId)"></button>
+	<button image="/common/images/stop.gif" label="${c:l('p.close')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+</window>
+</zk>

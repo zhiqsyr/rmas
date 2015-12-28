@@ -1,0 +1,22 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+	<window id="errorWin" width="400px" title="RMAS"
+		border="normal" mode="modal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.ErrorVM')">
+
+		<separator spacing="10px"/>
+		<hbox>
+			<image src="/common/images/warning-btn.gif" />
+			<label value=""></label>
+		</hbox>
+		<separator spacing="20px" />
+		<toolbar mold="panel" align="center">
+			<button id="continueBtn" image="/common/images/itemConfirm.gif" label="${c:l('confirmbutton')}" height="25px" width="80px"
+				onClick="spaceOwner.detach()" />
+		</toolbar>
+
+	</window>
+</zk>

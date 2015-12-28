@@ -1,0 +1,110 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.ProductQueryVM')">
+<north title="Product Information">
+<div>
+<groupbox>
+	<caption label="${c:l('product.infomation.query')}"></caption>
+	<grid>
+		<columns>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="PN"></label>
+				<textbox value="@bind(vm.product.pn)"></textbox>
+				<label value="${c:l('p.product.brand')}"></label>
+				<textbox value="@bind(vm.product.brand)"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('p.product.type')}"></label>
+				<listbox mold="select"
+					model="@load(vm.productTypeLabelValueBeans)"
+					selectedItem="@bind(vm.product.productType) 
+						@converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+				<label value="${c:l('p.product.model.no')}"></label>
+				<textbox value="@bind(vm.product.modelNo)"></textbox>
+			</row>
+			<row spans="1,1,2">
+				<label value="${c:l('p.product.pcb.type')}"></label>
+				<textbox value="@bind(vm.product.pcbType)"></textbox>
+				<div sclass="searchButtonDiv">
+					<button image="/common/images/search.gif" label="${c:l('search')}" onClick="@command('onSearch')"></button>
+				</div>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<div sclass="centerButtonDiv">
+	<button image="/common/images/itemAdd.gif" label="${c:l('addbutton')}" onClick="@command('onShowAdd')"></button>
+	<button image="/common/images/itemEdit.gif" label="${c:l('modifybutton')}" onClick="@command('onShowEdit')" sclass="buttonSpace" disabled="@load(empty vm.selected)"></button>
+	<button image="/common/images/itemRemove.gif" label="${c:l('deletebutton')}" onClick="@command('onDelete')" sclass="buttonSpace" disabled="@load(empty vm.selected)"></button>
+	<fileupload label="${c:l('import.bomlist')}" image="/common/images/upload.png" onUpload="@command('onImport', media=event.media)" sclass="buttonSpace" disabled="@load(empty vm.selected)"/>
+</div>
+</div>
+</north>
+<center>
+<listbox width="100%" vflex="true"
+	model="@load(vm.result)" selectedItem="@bind(vm.selected)">
+	<listhead>
+		<listheader label="PN" sort="auto(pn)"
+				onSort="@command('onSort', prop='pn', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('p.product.brand')}" sort="auto(brand)" 
+				onSort="@command('onSort', prop='brand', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('p.product.type')}" sort="auto(productType)" 
+				onSort="@command('onSort', prop='productType', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('p.product.model.no')}" sort="auto(modelNo)" 
+				onSort="@command('onSort', prop='modelNo', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('p.product.pcb.type')}" sort="auto(pcbType)" 
+				onSort="@command('onSort', prop='pcbType', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('product.price')}" sort="auto(price)" 
+				onSort="@command('onSort', prop='price', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('p.product.keey.days')}" sort="auto(keepDays)" 
+				onSort="@command('onSort', prop='keepDays', ascending=event.ascending)"></listheader>
+		<listheader label="BOM LIST" align="center" width="80px"></listheader>
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell label="@load(item.pn)"></listcell>
+			<listcell label="@load(item.brand)"></listcell>
+			<listcell label="@load(item.productType) @converter('com.dl.rmas.web.converter.DictCodeIdNameConverter')"></listcell>
+			<listcell label="@load(item.modelNo)"></listcell>
+			<listcell label="@load(item.pcbType)"></listcell>
+			<listcell label="@load(item.price)"></listcell>
+			<listcell label="@load(item.keepDays)"></listcell>
+			<listcell>
+				<div align="center">
+					<toolbarbutton image="/common/images/itemView.gif" 
+						onClick="@command('onView', productId=item.productId)"></toolbarbutton>
+				</div>
+			</listcell>
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+<style>
+.ie8 span.z-upload, .ie9 span.z-upload, .ie10 span.z-upload {
+   display:inline-block;
+  }
+  .ie8 span.z-upload input, .ie9 span.z-upload input, .ie10 span.z-upload input {
+    z-index: 1;
+  }
+
+</style>
+</zk>

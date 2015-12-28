@@ -1,0 +1,51 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('element.edit')}" width="50%" border="normal"
+	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.ConfigEditVM')">
+<grid>
+	<columns>
+		<column width="30%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<span>
+			<label value="*" style="color:red"></label>
+			<label value="${c:l('element.name')}"></label>
+			</span>
+			<textbox value="@load(vm.dictCode.codeName) @save(vm.dictCode.codeName, before='onSubmit')"
+				constraint="no empty" maxlength="50"></textbox>
+		</row>
+		<row>
+			<span>
+			<label value="*" style="color:red"></label>
+			<label value="${c:l('element.code')}"></label>
+			</span>
+			<textbox value="@load(vm.dictCode.codeKey) @save(vm.dictCode.codeKey, before='onSubmit')"
+				constraint="no empty" maxlength="50"></textbox>
+		</row>
+		<row>
+			<span>
+			<label value="${c:l('element.description')}"></label>
+			</span>
+			<textbox value="@bind(vm.dictCode.codeDesc)" maxlength="100"></textbox>
+		</row>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('element.suquence')}"></label>
+			</span>
+			<intbox value="@load(vm.dictCode.codeOrder) @save(vm.dictCode.codeOrder, before='onSubmit')"
+				constraint="no empty"></intbox>
+		</row>
+	</rows>
+</grid>
+<div sclass="submitButtonDiv">
+	<button image="/common/images/save.png" label="${c:l('savebutton')}" onClick="@command('onSubmit')"></button>
+	<button image="/common/images/stop.gif" label="${c:l('closebutton')}" onClick="spaceOwner.detach()" sclass="buttonSpace"></button>
+</div>
+</window>
+</zk>

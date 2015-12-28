@@ -1,0 +1,124 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('p.qc.result')}" width="90%" height="98%"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.QcResultVM')">
+<borderlayout width="100%" height="100%">
+<center>
+<div>
+<div align="center" style="margin-top:10px">
+	<label value="${c:l('p.qc.result')}"></label>
+	<label value="@load(vm.qcResult)" style="margin-left:25px"></label>
+</div>
+
+<div align="center" style="margin-top:10px">
+<hbox align="center">
+	<label value="${c:l('p.remark')}"></label>
+	<textbox style="margin-left:25px" value="@bind(vm.qcRemark)" rows="5" width="500px"></textbox>
+</hbox>
+</div>
+
+<groupbox style="margin-top:10px" visible="@load(vm.qcResult eq 'OK')">
+	<caption label="${c:l('p.material.used')}"></caption>
+	<grid>
+		<columns>
+			<column width="15%" align="right"></column>
+			<column width="50%"></column>
+			<column width="15%" align="right"></column>
+			<column></column>
+			<column width="10%"></column>
+		</columns>
+		<rows>
+			<row>
+				<span>
+					<label value="*" style="color:red"></label>
+					<label value="${c:l('p.material.name')}"></label>
+				</span>
+				<!-- 
+				<listbox mold="select" width="95%"
+					model="@load(vm.materialNameLableValueBeans)"
+					selectedItem="@bind(vm.selectedBom) @converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+					<template name="model" var="item">
+						<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+					</template>
+				</listbox>
+				 -->
+				<bandbox id="bb" onChanging="@command('onListBoms', _4Pre=event.value)" width="310px"
+					style="text-transform:uppercase;" value="@bind(vm.selectedBom) @converter('com.dl.rmas.web.converter.BomMaterialNameConverter')"
+				    buttonVisible="true" autodrop="true">
+					<bandpopup height="265px">
+						<vbox width="310px">
+							<listbox id="sltLb" width="100%" 
+								mold="paging" pageSize="10"
+								model="@load(vm._4Slts)" onSelect="@command('onSlt', sltLb=sltLb, bb=bb)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell>
+											<label value="@load(item.materialName)" sclass="texthidenstyle" tooltiptext="@load(item.materialName)"></label>
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</vbox>									
+					</bandpopup>
+				</bandbox>							 
+				<span>
+					<label value="*" style="color:red"></label>
+					<label value="${c:l('p.material.number')}"></label>
+				</span>
+				<intbox value="@load(vm.editMaterial.number) 
+					@save(vm.editMaterial.number, before='onEditMaterial')" width="90%"
+					constraint="no empty"></intbox>
+				<button image="/common/images/save.png" label="${c:l('p.save')}" onClick="@command('onEditMaterial')"
+					disabled="@load(empty vm.selectedBom)"></button>
+			</row>
+		</rows>
+	</grid>
+	<listbox id="lb" width="100%" mold="paging" pageSize="3"
+		model="@load(vm.result)" onSelect="@command('onSelectMaterial', selectedMaterial=lb.selectedItem.value)">
+		<listhead>
+			<listheader label="${c:l('p.material.name')}"></listheader>
+			<listheader label="${c:l('p.manufacturer.model')}"></listheader>
+			<listheader label="${c:l('p.material.no')}" width="18%"></listheader>
+			<listheader label="${c:l('p.material.ino')}" width="18%"></listheader>
+			<listheader label="${c:l('p.material.number')}" width="14%"></listheader>
+			<listheader label="${c:l('p.operation')}" width="10%"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell>
+					<label sclass="texthidenstyle" value="@load(item.bom.materialName)" tooltiptext="@load(item.bom.materialName)"></label>
+				</listcell>
+				<listcell>
+					<label sclass="texthidenstyle" value="@load(item.bom.manufacturerModel)" tooltiptext="@load(item.bom.manufacturerModel)"></label>
+				</listcell>
+				<listcell>
+					<label sclass="texthidenstyle" value="@load(item.bom.materialNo)" tooltiptext="@load(item.bom.materialNo)"></label>
+				</listcell>
+				<listcell>
+					<label sclass="texthidenstyle" value="@load(item.bom.ino)" tooltiptext="@load(item.bom.ino)"></label>
+				</listcell>
+				<listcell>
+					<label sclass="texthidenstyle" value="@load(item.number)" tooltiptext="@load(item.number)"></label>
+				</listcell>
+				<listcell>
+					<div align="center">
+					<toolbarbutton image="/common/images/itemRemove.gif" onClick="@command('onDeleteMaterial', selectedMaterial=item)"></toolbarbutton>
+					</div>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+</groupbox>
+</div>
+</center>
+<south>
+<div align="center">
+	<button image="/common/images/itemConfirm.gif" label="确认" onClick="@command('onSubmit')"></button>
+	<button image="/common/images/stop.gif" label="取消" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+</south>
+</borderlayout>
+</window>
+</zk>

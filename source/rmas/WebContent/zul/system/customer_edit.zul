@@ -1,0 +1,65 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('customer.data.edit')}" width="80%" border="normal"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.CustomerEditVM')">
+<grid>
+	<columns>
+		<column width="30%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('customer.companyname')}"></label>
+			</span>
+			<textbox value="@load(vm.customer.fullName) @save(vm.customer.fullName, before='onSubmit')"
+				constraint="no empty" maxlength="30" ></textbox>
+		</row>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('customer.shortName')}"></label>
+			</span>
+			<textbox value="@load(vm.customer.shortName) @save(vm.customer.shortName, before='onSubmit')"
+				constraint="no empty" maxlength="50"></textbox>
+		</row>
+		<row>
+			<label value="${c:l('customer.contactorName')}"></label>
+			<textbox value="@bind(vm.customer.contactorName)" maxlength="30"></textbox>
+		</row>
+		<row>
+			<label value="${c:l('customer.mobilephone')}"></label>
+			<textbox value="@bind(vm.customer.mobilephone)" maxlength="30"></textbox>
+		</row>
+		<row>
+			<label value="${c:l('customer.email')}"></label>
+			<textbox value="@bind(vm.customer.email)" maxlength="30"></textbox>
+		</row>
+		<row>
+			<label value="${c:l('customer.fixphone')}"></label>
+			<textbox value="@bind(vm.customer.fixphone)" maxlength="30"></textbox>
+		</row>
+		<row>
+			<label value="${c:l('customer.addr')}"></label>
+			<textbox value="@bind(vm.customer.addr)" rows="3" maxlength="200"></textbox>
+		</row>
+		<row>
+			<label value="Ship Via"></label>
+			<textbox value="@bind(vm.customer.shipVia)" maxlength="200"></textbox>
+		</row>
+		<row>
+			<label value="Attn"></label>
+			<textbox value="@bind(vm.customer.attn)" maxlength="200"></textbox>
+		</row>				
+	</rows>
+</grid>
+	
+<div sclass="submitButtonDiv">
+	<button image="/common/images/itemConfirm.gif" label="${c:l('confirmbutton')}" onClick="@command('onSubmit')"></button>
+	<button image="/common/images/stop.gif" label="${c:l('cancelbutton')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+</window>
+</zk>

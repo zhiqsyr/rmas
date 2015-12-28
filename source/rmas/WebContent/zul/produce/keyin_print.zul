@@ -1,0 +1,84 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="printWin" border="none" width="176px"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.produce.KeyinPrintVM')"
+	onCreate="Clients.print();Clients.evalJavaScript(&quot;window.opener=null; window.close();&quot;)">
+	<grid style="margin:auto;border:normal">
+		<columns>
+			<column width="15%"></column>
+			<column width="35%"></column>
+			<column width="15%"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="RMA No" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="@load(vm.sn.order.rma)"></label>	
+				</span>
+				<label value="Item No" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="@load(vm.sn.snIndex)"></label>	
+				</span>
+			</row>
+			<row spans="1,3">
+				<label value="SN" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="@load(vm.sn.sn)"></label>	
+				</span>
+			</row>
+			<row>
+				<label value="Part Cust" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="NB.M8W11.001"></label>	
+				</span>
+				<label value="Warr" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="WITHOUT"></label>	
+				</span>
+			</row>
+			<row>
+				<label value="Brand" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="@load(vm.sn.productId) @converter('com.dl.rmas.web.converter.ProductIdConverter')"></label>	
+				</span>
+				<label value="R.T." style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="2"></label>	
+				</span>
+			</row>
+			<row>
+				<label value="Type" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="ASPIRE VS-122"></label>	
+				</span>
+				<label value="Desc" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="@load(vm.sn.remark)"></label>	
+				</span>
+			</row>
+			<row spans="1,1,2">
+				<label value="MB Model" style="font-weight:bold;"></label>
+				<span>
+					<label value="："></label>
+					<label value="ANGEL-TM"></label>	
+				</span>
+				<div align="center">
+					<label value="NO POWER" style="font-weight:bold;"></label>
+				</div>
+			</row>
+		</rows>
+	</grid>
+</window>
+</zk>	

@@ -1,0 +1,88 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('user.data.edit')}" width="40%" border="normal"
+	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.UserEditVM')">
+<grid style="border:0px">
+	<columns>
+		<column width="30%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('user.number')}"></label>
+			</span>
+			<textbox value="@load(vm.user.userNo) @save(vm.user.userNo,before='onSubmit')" maxlength="30"
+				constraint="no empty"
+				disabled="@load(not empty vm.user.userId)"></textbox>
+		</row>
+		
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('user.name')}"></label>
+			</span>
+			<textbox value="@load(vm.user.userName) @save(vm.user.userName,before='onSubmit')" maxlength="50"
+				constraint="no empty"></textbox>
+		</row>
+		
+		<row visible="@load(empty vm.user.userId)">
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('user.password')}"></label>
+			</span>
+			<textbox type="password" value="@load(vm.user.password) @save(vm.user.password,before='onSubmit')"
+				constraint="no empty"></textbox>
+		</row>
+		
+		<row>
+			<span>
+				<label value="${c:l('user.phone')}"></label>
+			</span>
+			<textbox value="@bind(vm.user.phone)" maxlength="30"></textbox>
+		</row>
+		
+		<row>
+			<span>
+				<label value="${c:l('user.address')}"></label>
+			</span>
+			<textbox value="@bind(vm.user.address)" maxlength="100"></textbox>
+		</row>
+		
+		<row>
+			<label value="${c:l('user.email')}"></label>
+			<textbox value="@bind(vm.user.email)" maxlength="30"></textbox>
+		</row>
+		
+		<row>
+			<label value="${c:l('user.education')}"></label>
+			<textbox value="@bind(vm.user.education)" maxlength="30"></textbox>
+		</row>
+		
+		<row>
+			<label value="${c:l('user.deptname')}"></label>
+			<textbox value="@bind(vm.user.deptName)" maxlength="30"></textbox>
+		</row>
+		
+		<row>
+			<label value="${c:l('user.post')}"></label>
+			<textbox value="@bind(vm.user.post)" maxlength="30"></textbox>
+		</row>
+		
+		<row>
+			<label value="${c:l('user.careerlevel')}"></label>
+			<textbox value="@bind(vm.user.careerLevel)" maxlength="30"></textbox>
+		</row>
+	</rows>
+</grid>
+
+<div sclass="submitButtonDiv">
+	<button image="/common/images/save.png" label="${c:l('savebutton')}" onClick="@command('onSubmit')"></button>
+	<button image="/common/images/stop.gif" label="${c:l('cancelbutton')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+</div>
+</window>
+</zk>

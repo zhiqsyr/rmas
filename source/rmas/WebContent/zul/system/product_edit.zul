@@ -1,0 +1,68 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('product.infomation.edit')}" width="80%"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.ProductEditVM')">
+	
+<grid>
+	<columns>
+		<column width="30%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="PN"></label>
+			</span>
+			<textbox value="@load(vm.product.pn) @save(vm.product.pn, before='onSubmit')"
+				constraint="no empty"
+				disabled="@load(not empty vm.product.productId)"></textbox>
+		</row>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('p.product.brand')}"></label>
+			</span>
+			<textbox value="@load(vm.product.brand) @save(vm.product.brand, before='onSubmit')"
+				constraint="no empty"></textbox>
+		</row>
+		<row>
+			<label value="${c:l('p.product.model.no')}"></label>
+			<textbox value="@load(vm.product.modelNo) @save(vm.product.modelNo)"></textbox>
+		</row>
+		<row>
+			<label value="${c:l('p.product.pcb.type')}"></label>
+			<textbox value="@load(vm.product.pcbType) @save(vm.product.pcbType)"></textbox>
+		</row>
+		<row>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="${c:l('p.product.type')}"></label>
+			</span>
+			<listbox mold="select"
+				model="@load(vm.productTypeLabelValueBeans)"
+				selectedItem="@bind(vm.product.productType) 
+					@converter('com.dl.rmas.web.converter.SelectMoldConverter')">
+				<template name="model" var="item">
+					<listitem label="@load(item.label)" value="@load(item.value)"></listitem>
+				</template>
+			</listbox>
+		</row>
+		<row>
+			<label value="${c:l('product.price')}"></label>
+			<doublebox value="@load(vm.product.price) @save(vm.product.price)"></doublebox>
+		</row>
+		<row>
+			<label value="${c:l('p.product.keey.days')}"></label>
+			<intbox value="@load(vm.product.keepDays) @save(vm.product.keepDays)"></intbox>
+		</row>
+	</rows>
+</grid>
+<div align="center" sclass="submitButtonDiv">
+	<button image="/common/images/itemConfirm.gif" label="${c:l('confirmbutton')}" onClick="@command('onSubmit')"></button>
+	<button image="/common/images/stop.gif" label="${c:l('cancelbutton')}" onClick="spaceOwner.detach()" sclass="buttonSpace"></button>
+</div>
+</window>
+</zk>

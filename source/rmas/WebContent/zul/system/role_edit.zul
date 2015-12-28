@@ -1,0 +1,36 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<window id="editWin" title="${c:l('role.edit')}" width="40%" border="normal"
+	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.system.RoleEditVM')">
+	
+	<grid>
+		<columns>
+			<column width="35%" align="right"></column>
+			<column></column>
+		</columns>
+		<rows>
+			<row>
+				<span>
+					<label value="*" style="color:red"/>
+					<label value="${c:l('role.name')}"></label>
+				</span>
+				<textbox value="@load(vm.role.roleName) @save(vm.role.roleName, before='onSubmit')" 
+					constraint="no empty" maxlength="50"></textbox>
+			</row>
+			<row>
+				<label value="${c:l('role.desc')}"></label>
+				<textbox value="@bind(vm.role.roleDesc)" rows="3" maxlength="200"></textbox>
+			</row>
+		</rows>
+	</grid>
+	
+	<div sclass="submitButtonDiv">
+		<button image="/common/images/save.png" label="${c:l('savebutton')}" onClick="@command('onSubmit')"></button>
+		<button image="/common/images/stop.gif" label="${c:l('cancelbutton')}" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+	</div>
+	
+</window>
+</zk>

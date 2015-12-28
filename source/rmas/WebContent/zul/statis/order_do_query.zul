@@ -1,0 +1,94 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.statis.OrderDoQueryVM')">
+<north>
+<div>
+<groupbox>
+	<caption label="${c:l('doorder.search')}"></caption>
+	<grid>
+		<columns>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+		</columns>
+		<rows>
+			<row>
+				<label value="${c:l('doorder.rma.no')}"></label>
+				<textbox value="@bind(vm.query.doRma)"></textbox>
+				<label value="DO Time"></label>
+				<span>
+					<datebox value="@bind(vm.query.doTimeFrom)"></datebox>
+					~
+					<datebox value="@bind(vm.query.doTimeTo)"></datebox>				
+				</span>				
+			</row>
+			<row spans="4">
+				<div sclass="searchButtonDiv">
+					<button image="/common/images/search.gif" label="${c:l('search')}" onClick="@command('onSearch')"></button>
+				</div>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+</div>
+</north>
+<center>
+<listbox width="100%" vflex="true" model="@load(vm.result)">
+	<listhead>
+		<listheader label="${c:l('doorder.rma.no')}" width="160px" sort="auto(doRma)" 
+				onSort="@command('onSort', prop='doRma', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('customer.companyname')}" width="180px" sort="auto(customerId)" 
+				onSort="@command('onSort', prop='customerId', ascending=event.ascending)"></listheader>
+		<listheader label="Excel" width="200px"></listheader>
+		<listheader label="PDF" width="210px"></listheader>
+		<listheader label="${c:l('do.operator')}" width="120px" sort="auto(dor)" 
+				onSort="@command('onSort', prop='dor', ascending=event.ascending)"></listheader>
+		<listheader label="${c:l('do.time')}" width="120px" sort="auto(doTime)" 
+				onSort="@command('onSort', prop='doTime', ascending=event.ascending)"></listheader>				
+	</listhead>
+	<template name="model" var="item">
+		<listitem>
+			<listcell>
+				<label value="@load(item.doRma)" sclass="texthidenstyle" tooltiptext="@load(item.doRma)"></label>
+			</listcell>		
+			<listcell>
+				<label value="@load(item.customerId) @converter('com.dl.rmas.web.converter.CustomerIdConverter')" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.customerId) @converter('com.dl.rmas.web.converter.CustomerIdConverter')"></label>
+			</listcell>
+			<listcell>
+				<a onClick="@command('onDownload', filePath=item.excelPath)">
+					<label value="@load(item.excelPathFormatted)" sclass="texthidenstyle" 
+						tooltiptext="@load(item.excelPathFormatted)"></label>					
+				</a>
+			</listcell>
+			<listcell>
+				<a onClick="@command('onDownload', filePath=item.wordPath)">
+					<label value="@load(item.wordPathFormatted)" sclass="texthidenstyle" 
+						tooltiptext="@load(item.wordPathFormatted)"></label>					
+				</a>			
+			</listcell>
+			<listcell>
+				<label value="@load(item.dor) @converter('com.dl.rmas.web.converter.UserIdConverter')" 
+					sclass="texthidenstyle" 
+					tooltiptext="@load(item.dor) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.doTimeFormatted)" sclass="texthidenstyle" 
+					tooltiptext="@load(item.doTimeFormatted)"></label>
+			</listcell>
+		</listitem>
+	</template>
+</listbox>
+</center>
+<south>
+	<paging totalSize="@load(vm.pagingDto.totalSize)" pageSize="@load(vm.pagingDto.pageSize)" 
+		activePage="@bind(vm.pagingDto.activePage)" 
+		onPaging="@command('onSearch')"></paging>
+</south>
+</borderlayout>
+</zk>
