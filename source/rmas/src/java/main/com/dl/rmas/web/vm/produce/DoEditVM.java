@@ -3,6 +3,7 @@ package com.dl.rmas.web.vm.produce;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -49,32 +50,42 @@ public class DoEditVM extends BaseVM {
 	@Command
 	@NotifyChange({"result"})
 	public void onAdd() {
-		// 校验： 1）SN 状态=WAIT_DO 2）客户属于同一家
+		if (StringUtils.isBlank(snDto.getRma())
+				&& snDto.getSnIndex() == null
+				&& StringUtils.isBlank(snDto.getSn())) {
+			showWarningBox("Please input some data");
+			return;
+		}
+		
+		// 校验： 1）客户属于同一家
 		List<Sn> sns = snService.querySnsBySnDto(snDto, null);
-		Sn vo;
-		if (sns.size() == 1) {
-			vo = sns.get(0);
-		} else {
-			showWarningBox("There's no SN fit");
+		if (sns.size() == 0) {
+			showInformationBox("There's no SN fit");
 			return;
 		}
 		
-		if (!SnStatus.WAIT_DO.equals(vo.getStatus())) {
-			showWarningBox("The status of SN is not 'WAIT DO'. Change another");
-			return;
-		}
-		
+		Sn vo = sns.get(0);
 		if (customerId == null) {								// 首次设置客户ID
 			customerId = vo.getOrder().getCustomerId();
-		} else {
-			if (customerId != vo.getOrder().getCustomerId()) {	// 客户是否属于同一家
-				showWarningBox("The SN is of other custom");
+		}
+
+		// 客户是否属于同一家
+		for (Sn sn : sns) {
+			if (customerId != sn.getOrder().getCustomerId()) {	
+				showWarningBox("There is SN of other custom");
 				return;
 			}
 		}
-
-		List<Sn> added = new ArrayList<Sn>(result.size() + 1);	// 新加 SN 放在 result 第一位
-		added.add(vo);
+		
+		// 新加 SN 放在 result 前面
+		List<Sn> added = new ArrayList<Sn>(result.size() + sns.size());	
+		for (Sn sn : sns) {
+			if (result.contains(sn)) {		// 已经加过，不再添加
+				continue;
+			}
+			added.add(sn);
+		}
+		
 		added.addAll(result);
 		result = added;
 	}
@@ -140,6 +151,10 @@ public class DoEditVM extends BaseVM {
 
 	public boolean isReturnBtnVisible() {
 		return userRoleService.isUserAdmin(getCurrentUser().getUserId());
+	}
+
+	public void setSelected(Sn selected) {
+		this.selected = selected;
 	}
 
 	public Sn getSelected() {

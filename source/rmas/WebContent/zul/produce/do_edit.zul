@@ -11,24 +11,27 @@
 	<caption label="DO"></caption>
 	<grid>
 		<columns>
-			<column width="10%" align="right"></column>
-			<column width="23%"></column>
-			<column width="10%" align="right"></column>
-			<column width="23%"></column>
-			<column width="10%" align="right"></column>
-			<column width="24%"></column>			
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
+			<column width="15%" align="right"></column>
+			<column width="35%"></column>
 		</columns>
 		<rows>
-			<row spans="6">
-				<div align="center">
-					<label value="SN"></label>
-					<space></space>
-					<textbox value="@bind(vm.snDto.sn)" width="20%"></textbox>
-					<space></space>
+			<row>
+				<label value="${c:l('rma.no')}"></label>
+				<textbox value="@bind(vm.snDto.rma)"></textbox>
+				<label value="${c:l('rma.index')}"></label>
+				<intbox value="@bind(vm.snDto.snIndex)"></intbox>
+			</row>		
+			<row spans="1,1,2">
+				<label value="SN"></label>
+				<textbox value="@bind(vm.snDto.sn)" onOK="@command('onAdd')"></textbox>
+				<div sclass="searchButtonDiv">
 					<button image="/common/images/itemAdd.gif" label="Add" onClick="@command('onAdd')"></button>
-					<space></space>
-					<button image="/common/images/itemNopass.gif" label="Clear" onClick="@command('onClear')"></button>
 				</div>
+				<!-- 
+				<button image="/common/images/itemNopass.gif" label="Clear" onClick="@command('onClear')"></button>
+				 -->
 			</row>
 		</rows>
 	</grid>
@@ -42,7 +45,7 @@
 <center>
 <listbox id="resultListbox" width="100%" vflex="true" 
 	mold="paging" pageSize="20" rows="20"
-	model="@load(vm.result)" selectedItem="@save(vm.selected)">
+	model="@load(vm.result)" selectedItem="@bind(vm.selected)">
 	<listhead>
 		<listheader label="${c:l('p.operation')}" width="70px" align="center"></listheader>		
 		<listheader label="SN" width="190px"></listheader>
