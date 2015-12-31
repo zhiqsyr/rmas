@@ -38,6 +38,7 @@
 </groupbox>
 <div sclass="centerButtonDiv">
 	<button image="/common/images/itemAdd.gif" label="${c:l('p.generate.do.form')}" onClick="@command('onCreateRMA')"></button>
+	<button image="/common/images/itemRemove.gif" label="Clear" sclass="buttonSpace" onClick="@command('onClear')"></button>
 	<button image="/common/images/return.png" label="Return to QC" sclass="buttonSpace" visible="@load(vm.returnBtnVisible)" onClick="@command('onReturnQC')"></button>
 </div>
 </div>
