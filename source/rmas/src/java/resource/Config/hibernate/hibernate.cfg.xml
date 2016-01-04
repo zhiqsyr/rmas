@@ -14,6 +14,10 @@
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
+		
+		<!-- 尝试解决连接中止问题 -->
+	    <property name="validationQuery" value="SELECT 1" />
+	    <property name="testOnBorrow" value="true"/>		
 	</bean>
 	<bean id="sqlSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
@@ -25,7 +29,7 @@
                 <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>  
                 <prop key="hibernate.format_sql">${hibernate.format_sql}</prop> 
             </props>
-		</property>            
+		</property>
 	</bean>
 	
 	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">  
