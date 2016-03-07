@@ -7,7 +7,7 @@
 <north>
 <div>
 	<groupbox>
-		<caption label="${c:l('order.track')}"></caption>
+		<caption label="RMA Track"></caption>
 		<grid>
 			<columns>
 				<column width="15%" align="right"></column>
@@ -74,8 +74,8 @@
 			<listheader label="Wait Repair" width="100px"></listheader>
 			<listheader label="Wait QC" width="85px"></listheader>
 			<listheader label="Wait DO" width="85px"></listheader>
-			<listheader label="Onlie" width="85px"></listheader>
-			<listheader label="DONE" width="85px"></listheader>
+			<listheader label="Online" width="85px"></listheader>
+			<listheader label="Done" width="85px"></listheader>
 		</listhead>
 		<template name="model" var="item">
 			<listitem>

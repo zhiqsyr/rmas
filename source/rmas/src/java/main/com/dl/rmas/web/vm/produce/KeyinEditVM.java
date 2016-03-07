@@ -149,6 +149,7 @@ public class KeyinEditVM extends BaseVM {
 			order.setTotalRemain(order.getTotalQty());
 		} else if (order.getTotalQty() < order.getTotalFinished()) {
 			showWarningBox(PropertiesUtils.getValueInSystem("keyin.edit.validate"));
+			return;
 		} else {
 			order.setTotalRemain(order.getTotalQty() - order.getTotalFinished());
 		}

@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.dl.rmas.common.enums.ProduceType;
+import com.dl.rmas.dto.EmployeeReturnStatis;
 import com.dl.rmas.dto.EmployeeTrackDto;
 import com.dl.rmas.dto.ProduceDto;
 import com.dl.rmas.entity.SnProduce;
@@ -106,6 +107,133 @@ public class SnProductDao extends BaseDao {
 		q.setFirstResult(pagingDto.getActivePage() * pagingDto.getPageSize());
 		q.setMaxResults(pagingDto.getPageSize());
 		return q.list();
+	}
+	
+	/**
+	 * <b>Function: <b>员工返修情况统计
+	 *
+	 * @param query
+	 * @return
+	 */
+	public List<EmployeeReturnStatis> findEmployeeReturnStatis(EmployeeReturnStatis query) {
+		StringBuffer sql = new StringBuffer();
+		List<Object> params = new ArrayList<Object>();
+		
+		sql.append(" select u.user_no employeeNo, u.user_name employeeName, 'Repair' type, ");
+		sql.append(" 	count(1) rsTimes, sum(case s.repair_code when 1 then 1 when 46 then 1 else 0 end) escTimes, ");
+		sql.append(" 	(select count(1) from t_sn r where ifnull(r.repairer, r.flasher) = u.user_id and r.status = 'DONE') doTimes ");
+		sql.append(" from ( ");
+		sql.append(" 	select  ");
+		sql.append(" 		( ");
+		sql.append(" 		select l.sn_id ");
+		sql.append(" 		from t_sn l ");
+		sql.append(" 		where l.sn = cur.sn ");
+		sql.append(" 		and l.status = 'DONE' ");
+		sql.append(" 		and l.do_time < cur.create_time  ");
+		sql.append(" 		order by l.do_time desc limit 1 ");
+		sql.append(" 		) lastSnId ");
+		sql.append(" 	from t_sn cur ");
+		sql.append(" 	where cur.keep_status = 'WITHIN' ");
+		sql.append(" 	 ) v ");
+		sql.append(" join t_sn s on v.lastSnId = s.sn_id ");
+		sql.append(" join sm_user u on ifnull(s.repairer, s.flasher) = u.user_id ");
+		sql.append(" where 1 = 1 ");
+		if (query.getOperateTimeFrom() != null) {
+			sql.append(" and ifnull(s.flash_time, s.repaired_time) >= ? ");
+			params.add(query.getOperateTimeFrom());
+		}
+		if (query.getOperateTimeTo() != null) {
+			sql.append(" and ifnull(s.flash_time, s.repaired_time) <= ? ");
+			params.add(DateUtils.addDays(query.getOperateTimeTo(), 1));
+		}
+		sql.append(" group by u.user_no, u.user_name ");
+		sql.append(" union all ");
+		sql.append(" select u.user_no, u.user_name, 'QC',  ");
+		sql.append(" 	count(1), sum(case s.repair_code when 1 then 1 when 46 then 1 else 0 end) escTimes, ");
+		sql.append(" 	(select count(1) from t_sn q where q.qcer = u.user_id and q.status = 'DONE') doTimes ");
+		sql.append(" from ( ");
+		sql.append(" 	select  ");
+		sql.append(" 		( ");
+		sql.append(" 		select l.sn_id ");
+		sql.append(" 		from t_sn l ");
+		sql.append(" 		where l.sn = cur.sn ");
+		sql.append(" 		and l.status = 'DONE' ");
+		sql.append(" 		and l.do_time < cur.create_time  ");
+		sql.append(" 		order by l.do_time desc limit 1 ");
+		sql.append(" 		) lastSnId ");
+		sql.append(" 	from t_sn cur ");
+		sql.append(" 	where cur.keep_status = 'WITHIN' ");
+		sql.append(" 	 ) v ");
+		sql.append(" join t_sn s on v.lastSnId = s.sn_id  ");
+		sql.append(" join sm_user u on s.qcer = u.user_id ");
+		sql.append(" where 1 = 1 ");
+		if (query.getOperateTimeFrom() != null) {
+			sql.append(" and s.qc_time >= ? ");
+			params.add(query.getOperateTimeFrom());
+		}
+		if (query.getOperateTimeTo() != null) {
+			sql.append(" and s.qc_time <= ? ");
+			params.add(DateUtils.addDays(query.getOperateTimeTo(), 1));
+		}		
+		sql.append(" group by u.user_no, u.user_name ");
+		
+		return jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper(EmployeeReturnStatis.class));
+	}
+	
+	/**
+	 * <b>Function: <b>返修SN明细
+	 *
+	 * @param query
+	 * @return
+	 */
+	public List<ProduceDto> findReturnStatisDetails(EmployeeReturnStatis query) {
+		StringBuffer sql = new StringBuffer();
+		List<Object> params = new ArrayList<Object>();
+		
+		sql.append(" select entry.user_name userName, o.custrma, o.rma, cl.sn_index snIndex, cl.sn, p.pn,  ");
+		sql.append(" 	p.pcb_type pcbType, dc.code_key productType, cl.keep_status keepStatus,  ");
+		sql.append(" 	(select count(1) from t_sn bf where bf.sn = cl.sn and bf.status = 'DONE' and bf.do_time < cl.create_time) rtTimes, ");	// 当前是第几次返修
+		sql.append(" 	repairer.user_name repairerName, repairer.user_no repairerNo, code.code_name repairCode, ");
+		sql.append(" 	lst.repair_remark repairRemark, lst.repair_result repairResult,  ");
+		sql.append(" 	lst.material_used materialUsed, b.material_name partName, rm.number usedAmount, ");
+		sql.append(" 	qcer.user_name qcerName, qcer.user_no qcerNo, lst.qc_result qcResult, lst.final_result finalResult, ");
+		sql.append(" 	cidType.code_name cidTypeFormatted, cfd.code_name customerFaultDescFormatted,  ");
+		sql.append(" 	ot.code_name outletFormatted, cl.fail_code failCode, cl.case_id caseId, cl.remark  ");
+		sql.append(" from (				 ");
+		sql.append(" 	select cur.*, ");
+		sql.append(" 		(select lst.sn_id from t_sn lst  ");
+		sql.append(" 		where lst.sn = cur.sn and lst.status = 'DONE'  ");
+		sql.append(" 		and lst.do_time < cur.create_time  ");
+		sql.append(" 		order by lst.do_time desc limit 1) lastSnId ");
+		sql.append(" 	from t_sn cur ");	// 当前维修记录以及上次维修记录主键
+		sql.append(" 	where cur.keep_status = 'WITHIN' ");
+		sql.append("       ) cl  ");
+		sql.append(" join t_sn lst on lst.sn_id = cl.lastSnId ");	// 返修之前一次维修记录
+		sql.append(" JOIN sm_user entry ON cl.create_user = entry.user_id ");
+		sql.append(" JOIN t_order o ON cl.order_id = o.order_id ");
+		sql.append(" JOIN sm_product p ON cl.product_id = p.product_id ");
+		sql.append(" LEFT JOIN sm_dict_code dc ON p.product_type = dc.code_id ");
+		sql.append(" join sm_user repairer on ifnull(lst.repairer, lst.flasher) = repairer.user_id ");
+		sql.append(" LEFT JOIN sm_dict_code code ON lst.repair_code = code.code_id ");
+		sql.append(" LEFT JOIN sm_user qcer ON lst.qcer = qcer.user_id ");
+		sql.append(" LEFT JOIN sm_dict_code cidType ON cl.cid_type = cidType.code_id  ");
+		sql.append(" LEFT JOIN sm_dict_code cfd ON cl.customer_fault_desc = cfd.code_id ");
+		sql.append(" LEFT JOIN sm_dict_code ot ON cl.outlet = ot.code_id ");
+		sql.append(" LEFT JOIN t_sn_repair_material rm ON lst.sn_id = rm.sn_id  ");
+		sql.append(" LEFT JOIN sm_bom b ON rm.bom_id = b.bom_id ");
+		sql.append(" where 1 = 1 ");
+		if (query.getOperateTimeFrom() != null) {
+			sql.append(" and (ifnull(lst.repaired_time, lst.flash_time) >= ? or lst.qc_time >= ?) ");
+			params.add(query.getOperateTimeFrom());
+			params.add(query.getOperateTimeFrom());
+		}
+		if (query.getOperateTimeTo() != null) {
+			sql.append(" and (ifnull(lst.repaired_time, lst.flash_time) <= ? or lst.qc_time <= ?) ");
+			params.add(DateUtils.addDays(query.getOperateTimeTo(), 1));
+			params.add(DateUtils.addDays(query.getOperateTimeTo(), 1));
+		}			
+		
+		return jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper(ProduceDto.class));
 	}
 	
 	public List<ProduceDto> findProduceDtosByQuery(SnProduce query) {

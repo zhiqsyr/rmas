@@ -16,9 +16,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.zkoss.zul.Filedownload;
 
+import com.dl.rmas.common.cache.Constants;
 import com.dl.rmas.common.enums.ProduceType;
 import com.dl.rmas.common.utils.DateUtils;
+import com.dl.rmas.common.utils.JxlsUtils;
 import com.dl.rmas.dao.SnProductDao;
+import com.dl.rmas.dto.EmployeeReturnStatis;
 import com.dl.rmas.dto.EmployeeTrackDto;
 import com.dl.rmas.dto.ProduceDto;
 import com.dl.rmas.entity.DictCode;
@@ -88,6 +91,12 @@ public class SnProduceServiceImpl extends BaseServiceImpl implements SnProduceSe
 	}
 	
 	@Override
+	public List<EmployeeReturnStatis> queryEmployeeReturnStatis(
+			EmployeeReturnStatis query) {
+		return snProductDao.findEmployeeReturnStatis(query);
+	}
+	
+	@Override
 	public void doExport(SnProduce query) throws Exception {
 		List<EmployeeTrackDto> result = queryTrackByQueryDto(query, null);
 		
@@ -112,6 +121,33 @@ public class SnProduceServiceImpl extends BaseServiceImpl implements SnProduceSe
 		os.close();
 		
 		Filedownload.save(new File(path + excelFileName), "application/x-download");
+	}
+	
+	@Override
+	public void doExportReturn(List<EmployeeReturnStatis> statis)
+			throws Exception {
+		Map<String, Object> beans = new HashMap<String, Object>();
+		beans.put("result", statis);
+		
+		String excelRealPath = JxlsUtils.exportExcel(beans, Constants.FOLDER_REPORT_FORMS, 
+				"/Config/template/template_employee_return.xls", 
+				"Employee Return_" + DateUtils.transferDate2Str(new Date(), "yyyyMMddHHmmss") + ".xls");
+		
+		Filedownload.save(new File(excelRealPath), "application/x-download");
+	}
+	
+	@Override
+	public void doExportReturnDetail(EmployeeReturnStatis query)
+			throws Exception {
+		Map<String, Object> beans = new HashMap<String, Object>();
+		beans.put("sns", snProductDao.findReturnStatisDetails(query));
+		
+		String excelRealPath = JxlsUtils.exportExcel(beans, Constants.FOLDER_REPORT_FORMS, 
+				"/Config/template/template_employee_return_detail.xls", 
+				"Employee Return Detail_" + DateUtils.transferDate2Str(new Date(), "yyyyMMddHHmmss") + ".xls");
+		
+		Filedownload.save(new File(excelRealPath), "application/x-download");
+		
 	}
 	
 	@Override

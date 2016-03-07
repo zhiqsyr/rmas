@@ -3,6 +3,7 @@ package com.dl.rmas.service;
 import java.util.List;
 
 import com.dl.rmas.common.enums.ProduceType;
+import com.dl.rmas.dto.EmployeeReturnStatis;
 import com.dl.rmas.dto.EmployeeTrackDto;
 import com.dl.rmas.dto.ProduceDto;
 import com.dl.rmas.entity.SnProduce;
@@ -28,12 +29,36 @@ public interface SnProduceService extends BaseService {
 	List<EmployeeTrackDto> queryTrackByQueryDto(SnProduce query, PagingDto pagingDto);
 	
 	/**
+	 * <b>Function: <b>查询员工返修情况
+	 *
+	 * @param query
+	 * @return
+	 */
+	List<EmployeeReturnStatis> queryEmployeeReturnStatis(EmployeeReturnStatis query);
+	
+	/**
 	 * <b>Function: <b>导出员工绩效
 	 *
 	 * @param query
 	 * @throws Exception
 	 */
 	void doExport(SnProduce query) throws Exception;
+	
+	/**
+	 * <b>Function: <b>导出员工返修情况
+	 *
+	 * @param statis
+	 * @throws Exception
+	 */
+	void doExportReturn(List<EmployeeReturnStatis> statis) throws Exception;
+	
+	/**
+	 * <b>Function: <b>导出返修明细
+	 *
+	 * @param query
+	 * @throws Exception
+	 */
+	void doExportReturnDetail(EmployeeReturnStatis query) throws Exception;
 	
 	/**
 	 * <b>Function: <b>导出员工绩效明细 

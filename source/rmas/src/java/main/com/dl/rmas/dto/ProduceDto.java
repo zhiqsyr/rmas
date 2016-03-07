@@ -65,6 +65,8 @@ public class ProduceDto {
 	private String caseId;
 	private String remark;
 	
+	private Integer rtTimes;		// 当前SN是第几次返修
+	
 	public Integer getProduceId() {
 		return produceId;
 	}
@@ -391,6 +393,12 @@ public class ProduceDto {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public Integer getRtTimes() {
+		return rtTimes;
+	}
+	public void setRtTimes(Integer rtTimes) {
+		this.rtTimes = rtTimes;
 	}
 	
 }

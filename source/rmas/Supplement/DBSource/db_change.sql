@@ -199,3 +199,11 @@ SET menu_id = 270
 WHERE menu_id = 270;
 
 -- 以上已经执行 --
+
+insert into rmas.sm_menu (menu_id, menu_name, menu_url, menu_desc, menu_order, leaf, parent_id, validity)
+values (350, 'Employee Return Statis', '/zul/statis/employee_return_statis.zul', NULL, 50, 'YES', 300, 'VALID');
+
+create index index_order_id on t_sn(order_id);
+create index index_sn on t_sn(sn);
+create index index_producer on t_sn_produce(producer);
+create index index_sn_bom_id on t_sn_repair_material(sn_id, bom_id);

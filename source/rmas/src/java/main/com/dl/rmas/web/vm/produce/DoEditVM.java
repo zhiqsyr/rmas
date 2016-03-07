@@ -53,6 +53,7 @@ public class DoEditVM extends BaseVM {
 		// 校验：1）不能不输数据；2）客户属于同一家
 		if (StringUtils.isBlank(snDto.getRma())
 				&& snDto.getSnIndex() == null
+				&& snDto.getMacImei1() == null && snDto.getMacImei2() == null
 				&& StringUtils.isBlank(snDto.getSn())) {
 			showWarningBox("Please input some data");
 			return;

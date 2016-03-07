@@ -1,7 +1,9 @@
 package com.dl.rmas.web.vm.produce;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -54,6 +56,7 @@ public class ProduceQueryVM extends PageVM {
 		finalResultLabelValueBeans = labelValueBeanService.buildByEnumClassWithSelect(FinalResult.class);
 		rmaDoStatusLabelValueBeans = labelValueBeanService.buildByEnumClassWithSelect(RmaDoStatus.class);
 		
+		snDto.setReceiveDateFrom(DateUtils.addMonths(new Date(), -3));
 		pagingDto.setPageSize(15);
 		
 		onSearch();

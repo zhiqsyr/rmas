@@ -22,17 +22,21 @@
 				<textbox value="@bind(vm.snDto.snIndex)"></textbox>				
 			</row>
 			<row>
+				<label value="SN"></label>
+				<textbox value="@bind(vm.snDto.sn)"></textbox>			
+				<label value="${c:l('repair.engineer')}"></label>
+				<textbox value="@bind(vm.snDto.repairerName)"></textbox>			
+			</row>			
+			<row>
 				<label value="IMEI1"></label>
 				<textbox value="@bind(vm.snDto.macImei1)"></textbox>
 				<label value="IMEI2"></label>
 				<textbox value="@bind(vm.snDto.macImei2)"></textbox>
 			</row>
-			<row spans="1,1,2">
-				<label value="${c:l('repair.engineer')}"></label>
-				<textbox value="@bind(vm.snDto.repairerName)"></textbox>			
+			<row spans="4">
 				<div sclass="searchButtonDiv">
 					<button image="/common/images/search.gif" label="${c:l('search')}" onClick="@command('onSearch')"></button>					
-				</div>
+				</div>			
 			</row>
 		</rows>
 	</grid>

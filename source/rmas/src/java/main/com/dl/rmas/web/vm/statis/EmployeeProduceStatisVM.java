@@ -1,7 +1,9 @@
 package com.dl.rmas.web.vm.statis;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -31,6 +33,7 @@ public class EmployeeProduceStatisVM extends PageVM {
 	@Init
 	public void init() {
 		query = new SnProduce();
+		query.setEndTimeFrom(DateUtils.addMonths(new Date(), -3));
 		pagingDto.setPageSize(20);
 		
 		onSearch();

@@ -28,5 +28,7 @@ public class Constants {
 	/** 确认删除？ */
 	public static final String CONFIRM_TO_DELETE = PropertiesUtils.getValueInSystem("confirm.to.delete");
 	
+	/** 报告文件夹 */
+	public static final String FOLDER_REPORT_FORMS = "/data/rmas/ReportForms/";
 	
 }

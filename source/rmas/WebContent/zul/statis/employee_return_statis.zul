@@ -1,0 +1,70 @@
+<?import src="/zul/system/common_init.zul" directives="*"?>
+<?page contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.dl.rmas.web.vm.statis.EmployeeReturnStatisVM')">
+<north>
+<div>
+	<groupbox>
+		<caption label="Employee Return Statis"></caption>
+		<grid>
+			<columns>
+				<column width="15%" align="right"></column>
+				<column width="35%"></column>
+				<column width="15%" align="right"></column>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row spans="1,1,2">
+					<label value="${c:l('time')}"></label>
+					<hbox>
+						<datebox value="@bind(vm.query.operateTimeFrom)"></datebox>
+						~
+						<datebox value="@bind(vm.query.operateTimeTo)"></datebox>
+					</hbox>
+					<div sclass="searchButtonDiv">
+						<button image="/common/images/xls.png" label="Export to Excel" onClick="@command('onExport')"></button>
+						<button image="/common/images/search.gif" label="${c:l('search')}" sclass="buttonSpace" onClick="@command('onSearch')" ></button>
+					</div>
+				</row>
+			</rows>
+		</grid>
+	</groupbox>
+</div>
+</north>
+<center>
+	<listbox width="100%" vflex="true" mold="paging" pageSize="20"
+		model="@load(vm.result)">
+		<listhead>
+			<listheader label="${c:l('employee.number')}"></listheader>
+			<listheader label="${c:l('employee.name')}"></listheader>
+			<listheader label="Operate Type"></listheader>
+			<listheader align="center">
+				<a onClick="@command('onExportDetail', produceType='KEYIN')" label="Re-service QTY"></a>
+			</listheader>
+			<listheader align="center" label="NTF/CID QTY"></listheader>			
+			<listheader align="center" label="DO QTY"></listheader>			
+			<listheader align="center" label="Re-service Rate"></listheader>
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell>
+					<label value="@load(item.employeeNo)" tooltiptext="@load(item.employeeNo)" 
+						sclass="texthidenstyle"></label>
+				</listcell>
+				<listcell>
+					<label value="@load(item.employeeName)" tooltiptext="@load(item.employeeName)"
+						sclass="texthidenstyle"></label>
+				</listcell>
+				<listcell label="@load(item.type)"></listcell>
+				<listcell label="@load(item.rsTimes)"></listcell>
+				<listcell label="@load(item.escTimes)"></listcell>
+				<listcell label="@load(item.doTimes)"></listcell>
+				<listcell label="@load(item.reserviceRate) @converter('org.zkoss.bind.converter.FormatedNumberConverter', format='##.##%')"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+</center>
+</borderlayout>
+</zk>

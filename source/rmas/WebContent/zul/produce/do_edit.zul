@@ -23,6 +23,12 @@
 				<label value="${c:l('rma.index')}"></label>
 				<intbox value="@bind(vm.snDto.snIndex)"></intbox>
 			</row>		
+			<row>
+				<label value="IMEI1"></label>
+				<textbox value="@bind(vm.snDto.macImei1)"></textbox>
+				<label value="IMEI2"></label>
+				<textbox value="@bind(vm.snDto.macImei2)"></textbox>
+			</row>			
 			<row spans="1,1,2">
 				<label value="SN"></label>
 				<textbox value="@bind(vm.snDto.sn)" onOK="@command('onAdd')"></textbox>

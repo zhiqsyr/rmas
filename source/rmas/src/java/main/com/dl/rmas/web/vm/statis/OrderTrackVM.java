@@ -1,9 +1,11 @@
 package com.dl.rmas.web.vm.statis;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -45,6 +47,7 @@ public class OrderTrackVM extends PageVM {
 		rmaDoStatusLabelValueBeans = labelValueBeanService.buildByEnumClassWithSelect(RmaDoStatus.class);
 		
 		query = new Order();
+		query.setCloseTimeFrom(DateUtils.addMonths(new Date(), -3));
 		pagingDto.setPageSize(20);
 	
 		onSearch();

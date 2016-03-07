@@ -84,8 +84,13 @@
 					<label value="@load(item.receivedPdfPathFormatted)" sclass="texthidenstyle" 
 						tooltiptext="@load(item.receivedPdfPathFormatted)"></label>					
 				</a>								
-			</listcell>		
-			<listcell label="@load(item.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"></listcell>				
+			</listcell>	
+			<listcell>
+				<label value="@load(item.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"
+					tooltiptext="@load(item.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"
+					sclass="texthidenstyle"
+				></label>
+			</listcell>				
 			<listcell>
 				<label value="@load(item.expressCom)" tooltiptext="@load(item.expressCom)" sclass="texthidenstyle"></label>
 			</listcell>
@@ -98,7 +103,12 @@
 					tooltiptext="@load(item.receiver) @converter('com.dl.rmas.web.converter.UserIdConverter')" 
 					sclass="texthidenstyle"></label>
 			</listcell>
-			<listcell label="@load(item.receiveTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"></listcell>
+			<listcell>
+				<label value="@load(item.receiveTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"
+					tooltiptext="@load(item.receiveTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='dd-MM-yyyy / HH:mm')"
+					sclass="texthidenstyle"
+				></label>
+			</listcell>				
 		</listitem>
 	</template>
 </listbox>
