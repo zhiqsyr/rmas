@@ -30,7 +30,6 @@ import com.dl.rmas.entity.Sn;
 import com.dl.rmas.service.CustomerService;
 import com.dl.rmas.service.DictTypeCodeService;
 import com.dl.rmas.service.OrderDoService;
-import com.dl.rmas.service.OrderService;
 import com.dl.rmas.service.ProductService;
 import com.dl.rmas.web.zkmodel.PagingDto;
 import com.itextpdf.text.Document;
@@ -51,8 +50,6 @@ public class OrderDoServiceImpl extends BaseServiceImpl implements OrderDoServic
 	@Autowired
 	private OrderDoDao orderDoDao;
 	
-	@Autowired
-	private OrderService orderService;
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
@@ -100,6 +97,7 @@ public class OrderDoServiceImpl extends BaseServiceImpl implements OrderDoServic
 			if (sn.getProductId() != null) {
 				pdt = productService.queryById(Product.class, sn.getProductId());
 				sn.setPn(pdt != null ? pdt.getPn() : null);
+				sn.setPcbType(pdt != null ? pdt.getPcbType() : null);
 			}
 			if (sn.getCustomerFaultDesc() != null) {
 				dictCode = dictTypeCodeService.queryById(DictCode.class, sn.getCustomerFaultDesc());
@@ -142,8 +140,8 @@ public class OrderDoServiceImpl extends BaseServiceImpl implements OrderDoServic
 		String pdfFileName = "redo_" + orderDo.getDoRma() + ".pdf";
 		generateDoPdf(path + pdfFileName, beans);
 		
-//        Filedownload.save(new File(path + excelFileName), "application/x-download");
-        Filedownload.save(new File(path + pdfFileName), "application/x-download");
+        Filedownload.save(new File(path + excelFileName), "application/x-download");
+//        Filedownload.save(new File(path + pdfFileName), "application/x-download");
 		
         orderDo.setExcelPath(path + excelFileName);
         orderDo.setWordPath(path + pdfFileName);

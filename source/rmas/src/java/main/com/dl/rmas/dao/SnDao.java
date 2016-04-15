@@ -24,8 +24,8 @@ import com.dl.rmas.dto.NumberDto;
 import com.dl.rmas.dto.ProduceDto;
 import com.dl.rmas.dto.RepairingDto;
 import com.dl.rmas.dto.SnDto;
-import com.dl.rmas.entity.Sn;
 import com.dl.rmas.entity.Order.RmaDoStatus;
+import com.dl.rmas.entity.Sn;
 import com.dl.rmas.web.zkmodel.PagingDto;
 import com.dl.rmas.web.zkmodel.Sorter;
 

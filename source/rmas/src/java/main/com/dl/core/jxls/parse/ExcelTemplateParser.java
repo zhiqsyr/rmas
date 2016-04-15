@@ -3,6 +3,10 @@ package com.dl.core.jxls.parse;
 import java.io.InputStream;
 import java.util.List;
 
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+
 import com.dl.core.jxls.parse.model.CellModel;
 import com.dl.core.jxls.parse.model.ColumnWidthDefine;
 import com.dl.core.jxls.parse.model.MergedCell;
@@ -10,10 +14,6 @@ import com.dl.core.jxls.parse.model.RowModel;
 import com.dl.core.jxls.parse.model.TableModel;
 import com.dl.core.jxls.util.JxlUtil;
 import com.dl.core.jxls.util.StringHelper;
-
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
 
 /**
  * 解析Excel表格模板文件

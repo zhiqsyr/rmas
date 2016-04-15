@@ -4,8 +4,8 @@ import java.util.Date;
 
 import com.dl.rmas.common.enums.KeyinStatus;
 import com.dl.rmas.common.enums.ReceiveStatus;
-import com.dl.rmas.entity.Sn;
 import com.dl.rmas.entity.Order.RmaDoStatus;
+import com.dl.rmas.entity.Sn;
 
 @SuppressWarnings("serial")
 public class SnDto extends Sn {

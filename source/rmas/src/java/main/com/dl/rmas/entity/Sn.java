@@ -186,6 +186,8 @@ public class Sn extends BusinessEntity implements Comparable<Sn> {
 	private String pn;
 	@Transient
 	private List<SnProduce> snProduces;
+	@Transient
+	private String pcbType;
 	
 	public Integer getSnId() {
 		return this.snId;
@@ -592,6 +594,14 @@ public class Sn extends BusinessEntity implements Comparable<Sn> {
 			return order.getRma();
 		}
 		return null;
+	}
+
+	public String getPcbType() {
+		return pcbType;
+	}
+
+	public void setPcbType(String pcbType) {
+		this.pcbType = pcbType;
 	}
 
 	@Override

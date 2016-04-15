@@ -1,14 +1,14 @@
 package com.dl.rmas.common.utils;
 
-import java.awt.Font;  
-import java.awt.Graphics;  
-import java.awt.Graphics2D;  
-import java.awt.print.Book;  
-import java.awt.print.PageFormat;  
-import java.awt.print.Paper;  
-import java.awt.print.Printable;  
-import java.awt.print.PrinterException;  
-import java.awt.print.PrinterJob;  
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.Book;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.util.Map;
 
 /**
