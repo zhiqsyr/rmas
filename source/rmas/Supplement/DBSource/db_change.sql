@@ -207,3 +207,5 @@ create index index_order_id on t_sn(order_id);
 create index index_sn on t_sn(sn);
 create index index_producer on t_sn_produce(producer);
 create index index_sn_bom_id on t_sn_repair_material(sn_id, bom_id);
+
+-- 以上已经执行 --
