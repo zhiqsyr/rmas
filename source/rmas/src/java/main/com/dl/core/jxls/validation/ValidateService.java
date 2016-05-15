@@ -1,7 +1,5 @@
 package com.dl.core.jxls.validation;
 
-import java.util.List;
-
 import com.dl.core.jxls.common.model.ParameterSet;
 import com.dl.core.jxls.entity.ReportConfig;
 import com.dl.core.jxls.model.UploadDataModel;

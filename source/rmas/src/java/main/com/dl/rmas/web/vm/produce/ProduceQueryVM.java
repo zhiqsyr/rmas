@@ -82,6 +82,20 @@ public class ProduceQueryVM extends PageVM {
 		snService.doExportExcel(snDto);
 	}
 	
+	/**
+	 * 导出查询结果到Excel Part Name
+	 * @throws Exception 
+	 */
+	@Command
+	public void onExportPartName() throws Exception {
+		if (!showQuestionBox(PropertiesUtils.getValueInSystem("produce.query.export.quesiton"))) {
+			return;
+		}
+		
+		// 导出
+		snService.doExportExcelLine(snDto);
+	}
+	
 	public SnDto getSnDto() {
 		return snDto;
 	}

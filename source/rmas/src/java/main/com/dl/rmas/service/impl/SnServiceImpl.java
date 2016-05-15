@@ -365,13 +365,41 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 	public void doExportExcel(SnDto queryDto) throws Exception {
 		List<ProduceDto> sns = snDao.findProduceDtosByQueryDto(queryDto);
 		
+		doExport(sns, "/Config/template/template_produce_query.xls");
+	}
+	
+	@Override
+	public void doExportExcelLine(SnDto queryDto) throws Exception {
+		List<ProduceDto> sns = snDao.findProduceDtosByQueryDto(queryDto);
+		
+		List<ProduceDto> result = new ArrayList<ProduceDto>();
+		ProduceDto prod = null, dto;
+		for (int i = 0; i < sns.size(); i++) {
+			dto = sns.get(i);
+			if (i == 0 || !dto.getSn().equals(sns.get(i-1).getSn())) {
+				prod = dto;
+				result.add(prod);
+			} else {
+				prod.setPartName(prod.getPartName() + ", " + dto.getPartName());
+				prod.setCate(prod.getCate() + ", " + dto.getCate());
+				prod.setUsedAmount(prod.getUsedAmount() + ", " + dto.getUsedAmount());
+			}
+		}
+		
+		doExport(result, "/Config/template/template_produce_query_line.xls");
+	}
+	
+	private void doExport(List<ProduceDto> sns, String templatePath) throws Exception {
 		Map<String, Object> beans = new HashMap<String, Object>();
 		beans.put("sns", sns);
-		String path = "/data/rmas/ComprehensiveSearch/";
+		
+		// TODO del for deploy
+		String tmp = "/Users/zhiqsyr/dev/temp";
+		String path = tmp + "/data/rmas/ComprehensiveSearch/";
 		
 		// 1）生成EXCEL
 		XLSTransformer transformer = new XLSTransformer();
-		ClassPathResource cpr = new ClassPathResource("/Config/template/template_produce_query.xls");
+		ClassPathResource cpr = new ClassPathResource(templatePath);
 		Workbook wb = transformer.transformXLS(cpr.getInputStream(), beans);
 		
 		File fold = new File(path);
@@ -385,7 +413,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		os.flush();
 		os.close();
 		
-		Filedownload.save(new File(path + excelFileName), "application/x-download");
+		Filedownload.save(new File(path + excelFileName), "application/x-download");		
 	}
 	
 	@Override

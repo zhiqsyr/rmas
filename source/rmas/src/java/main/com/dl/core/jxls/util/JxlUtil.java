@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.dl.core.jxls.parse.model.CellModel;
-import com.dl.core.jxls.parse.model.CellModel.AlignType;
-import com.dl.core.jxls.parse.model.CellModel.BorderStyle;
-import com.dl.core.jxls.parse.model.CellModel.BorderWidth;
-import com.dl.core.jxls.parse.model.CellModel.VAlignType;
-import com.dl.core.jxls.parse.model.MergedCell;
-
 import jxl.Cell;
 import jxl.CellFeatures;
 import jxl.CellType;
@@ -28,6 +21,13 @@ import jxl.format.Font;
 import jxl.format.RGB;
 import jxl.format.UnderlineStyle;
 import jxl.format.VerticalAlignment;
+
+import com.dl.core.jxls.parse.model.CellModel;
+import com.dl.core.jxls.parse.model.CellModel.AlignType;
+import com.dl.core.jxls.parse.model.CellModel.BorderStyle;
+import com.dl.core.jxls.parse.model.CellModel.BorderWidth;
+import com.dl.core.jxls.parse.model.CellModel.VAlignType;
+import com.dl.core.jxls.parse.model.MergedCell;
 
 /**
  * Excel数据解析工具类，使用JXL对excel文件进行解析

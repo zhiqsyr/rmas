@@ -1,14 +1,14 @@
 package com.dl.core.jxls.validation.validator;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.dl.core.jxls.entity.ColumnConfig;
 import com.dl.core.jxls.model.CellDataModel;
 import com.dl.core.jxls.model.RowDataModel;
 import com.dl.core.jxls.model.UploadDataModel;
 import com.dl.core.jxls.util.StringHelper;
 import com.dl.core.jxls.validation.util.ValidateUtils;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 /**
  * 
  * @author JIANGHUIJI

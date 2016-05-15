@@ -24,8 +24,8 @@ import com.dl.rmas.dto.NumberDto;
 import com.dl.rmas.dto.ProduceDto;
 import com.dl.rmas.dto.RepairingDto;
 import com.dl.rmas.dto.SnDto;
-import com.dl.rmas.entity.Sn;
 import com.dl.rmas.entity.Order.RmaDoStatus;
+import com.dl.rmas.entity.Sn;
 import com.dl.rmas.web.zkmodel.PagingDto;
 import com.dl.rmas.web.zkmodel.Sorter;
 
@@ -186,7 +186,7 @@ public class SnDao extends BaseDao {
 		sql.append("	s.status, flasher.user_name flasherName, flasher.user_no flasherNo, s.flash_result flashResult,");
 		sql.append("	repairer.user_name repairerName, repairer.user_no repairerNo, code.code_name repairCode,");
 		sql.append("	s.repair_remark repairRemark, s.repair_result repairResult, s.material_used materialUsed,");
-		sql.append("	b.material_name partName, rm.number usedAmount, qcer.user_name qcerName, qcer.user_no qcerNo,");
+		sql.append("	b.material_name partName, b.category cate, rm.number usedAmount, qcer.user_name qcerName, qcer.user_no qcerNo,");
 		sql.append("	s.qc_result qcResult, stoper.user_name stoperName, stoper.user_no stoperNo, s.stop_reason stopReason,");
 		sql.append("	s.final_result finalResult, s.keep_status keepStatus, s.mac_imei1 macImei1, s.mac_imei1_n macImei1N,");
 		sql.append("	s.mac_imei2 macImei2, s.mac_imei2_n macImei2N, ");

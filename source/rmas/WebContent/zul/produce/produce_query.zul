@@ -105,10 +105,11 @@
 					<label value="IMEI1"></label>
 					<textbox value="@bind(vm.snDto.macImei1)"></textbox>					
 					<label value="New IMEI1"></label>
-					<textbox value="@bind(vm.snDto.macImei1N)"></textbox>		
-					<div sclass="searchButtonDiv">
-						<button image="/common/images/xls.png" label="Export to Excel" onClick="@command('onExport')"></button>
-						<button image="/common/images/search.gif" sclass="buttonSpace" label="${c:l('search')}" onClick="@command('onSearch')"></button>	
+					<textbox value="@bind(vm.snDto.macImei1N)"></textbox>	
+					<div align="center">
+						<button label="Export" onClick="@command('onExport')"></button>
+						<button style="margin-left:2px" label="Export(Part Name)" onClick="@command('onExportPartName')"></button>
+						<button style="margin-left:2px" label="${c:l('search')}" onClick="@command('onSearch')"></button>	
 					</div>				
 				</row>
 			</rows>

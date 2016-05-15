@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dl.core.jxls.entity.ReportConfig;
 import com.dl.core.jxls.parse.model.RowModel;
 import com.dl.core.jxls.validation.ValidateResult;
 
