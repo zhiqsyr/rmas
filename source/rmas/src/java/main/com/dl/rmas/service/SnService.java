@@ -77,6 +77,13 @@ public interface SnService extends BaseService {
 	 * @param queryDto
 	 */
 	void doExportExcel(SnDto queryDto) throws Exception;
+	/**
+	 * 查询满足 queryDto 到 Excel , 用料情况列在一行
+	 * 
+	 * @param queryDto
+	 * @throws Exception
+	 */
+	void doExportExcelLine(SnDto queryDto) throws Exception;
 	
 	/**
 	 * <b>Function: <b>打印 SN 标签

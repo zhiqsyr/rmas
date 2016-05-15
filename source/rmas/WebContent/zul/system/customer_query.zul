@@ -60,7 +60,9 @@
 	</listhead>
 	<template name="model" var="item">
 		<listitem>
-			<listcell label="@load(item.fullName)"></listcell>
+			<listcell>
+				<label value="@load(item.fullName)" sclass="texthidenstyle" tooltiptext="@load(item.fullName)"></label>
+			</listcell>
             <listcell label="@load(item.shortName)"></listcell>
 			<listcell label="@load(item.contactorName)"></listcell>
 			<listcell label="@load(item.mobilephone)"></listcell>
