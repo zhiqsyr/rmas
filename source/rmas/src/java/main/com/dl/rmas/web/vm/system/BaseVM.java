@@ -81,7 +81,7 @@ public class BaseVM {
 		    throw new RuntimeException(e);
 		}
     }
-
+	
     public void showErrorBox(String message) {
 		try {
 		    Messagebox.show(message, Constants.WEBAPP_NAME, Messagebox.OK, Messagebox.ERROR);

@@ -153,6 +153,9 @@ public class Sn extends BusinessEntity implements Comparable<Sn> {
 	
 	@Column(name = "oqc_result")
 	private String oqcResult;	
+
+	@Column(name = "oqc_remark")
+	private String oqcRemark;
 	
 	@Column(name = "keyouter")
 	private Integer keyouter;
@@ -456,7 +459,15 @@ public class Sn extends BusinessEntity implements Comparable<Sn> {
 	public void setQcRemark(String qcRemark) {
 		this.qcRemark = qcRemark;
 	}
+	
+	public String getOqcRemark() {
+		return oqcRemark;
+	}
 
+	public void setOqcRemark(String oqcRemark) {
+		this.oqcRemark = oqcRemark;
+	}
+	
 	public Date getQcTime() {
 		return this.qcTime;
 	}

@@ -1,7 +1,9 @@
 package com.dl.rmas.web.vm.produce;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.annotation.BindingParam;
@@ -62,7 +64,7 @@ public class OQcQueryVM extends PageVM {
 			selectedSns.add((Sn) listitem.getValue());
 		}
 		
-		snService.doOQc(selectedSns, FinalResult.OK);
+		snService.doOQc(selectedSns, FinalResult.OK, null);//oqcOK的remark为空
 		
 		showInformationBox(Constants.OPERATION_COMPLETED);
 		onSearch();
@@ -85,9 +87,15 @@ public class OQcQueryVM extends PageVM {
 			selectedSns.add((Sn) listitem.getValue());
 		}
 		
-		snService.doOQc(selectedSns, FinalResult.NG);
+//		snService.doOQc(selectedSns, FinalResult.NG);
+//		
+//		showInformationBox(Constants.OPERATION_COMPLETED);
 		
-		showInformationBox(Constants.OPERATION_COMPLETED);
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put(L1keyinQueryVM.KEY_SNS, selectedSns);
+		args.put(OQcResultVM.KEY_OQC_RESULT, FinalResult.NG);
+		showModal(OQcResultVM.URL_OQC_RESULT, args);
+		
 		onSearch();
 	}
 	

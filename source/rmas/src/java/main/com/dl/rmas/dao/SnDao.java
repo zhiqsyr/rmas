@@ -19,11 +19,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
+import com.dl.rmas.common.enums.FinalResult;
 import com.dl.rmas.common.enums.SnStatus;
+import com.dl.rmas.dto.DODateDto;
+import com.dl.rmas.dto.FinalResultDto;
 import com.dl.rmas.dto.NumberDto;
 import com.dl.rmas.dto.ProduceDto;
 import com.dl.rmas.dto.RepairingDto;
 import com.dl.rmas.dto.SnDto;
+import com.dl.rmas.dto.StopReasonDto;
 import com.dl.rmas.entity.Order.RmaDoStatus;
 import com.dl.rmas.entity.Sn;
 import com.dl.rmas.web.zkmodel.PagingDto;
@@ -348,6 +352,69 @@ public class SnDao extends BaseDao {
 		
 		return q.list();
 	}
+	
+	
+	/**
+	 * 查询指定sn的doresult状态 
+	 * 
+	 * @param sn
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public String findFinalresult(String sn){
+		String sql = "SELECT s.final_result as finalResult FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
+				.setResultTransformer(Transformers.aliasToBean(FinalResultDto.class));
+		List<FinalResultDto> result = q.list();
+		if (result != null) {
+			return result.get(0).getFinalResult();
+			
+		}
+		return null;
+	}
+	
+	/**
+	 * 查询指定sn的出货时间
+	 * 
+	 * @param sn
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Timestamp findDODate(String sn) {
+		String sql = "SELECT s.do_time as doDate FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
+				.setResultTransformer(Transformers.aliasToBean(DODateDto.class));
+		List<DODateDto> result = q.list();
+		if (result != null) {
+			return result.get(0).getDoDate();
+			
+		}
+		return null;	
+		
+	}
+	
+	/**
+	 * 查询指定sn的StopReason
+	 * 
+	 * @param sn
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public String findStopReason(String sn) {
+		String sql = "SELECT s.stop_reason as stopReason FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
+				.setResultTransformer(Transformers.aliasToBean(StopReasonDto.class));
+		List<StopReasonDto> result = q.list();
+		if (result != null) {
+			return result.get(0).getStopReason();
+			
+		}
+		return null;
+	}
+	
+	
+	
+	
 	
 	/**
 	 * 查询指定sn的二反次数

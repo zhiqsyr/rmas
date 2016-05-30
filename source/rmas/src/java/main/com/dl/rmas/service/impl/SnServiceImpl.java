@@ -7,6 +7,7 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -130,6 +131,38 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		
 		return snDao.findTwiceBackTimesBySn(sn);
 	}
+	
+
+	@Override
+	public String queryFinalResultBySn(String sn) {
+		if (StringUtils.isBlank(sn)) {
+			return null;
+		}
+		
+		return snDao.findFinalresult(sn);
+	}
+	
+	@Override
+	public Timestamp queryDODateBySn(String sn) {
+		if (StringUtils.isBlank(sn)) {
+			return null;
+		}
+		
+		return snDao.findDODate(sn);
+	}
+
+	@Override
+	public String queryStopReasonBySn(String sn) {
+		if (StringUtils.isBlank(sn)) {
+			return null;
+		}
+		
+		return snDao.findStopReason(sn);
+	}
+
+	
+	
+	
 	
 	@Override
 	public boolean querySnIsKeeping(String sn) {
@@ -288,7 +321,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 	}
 	
 	@Override
-	public void doOQc(List<Sn> sns, FinalResult finalResult) {
+	public void doOQc(List<Sn> sns, FinalResult finalResult, String oqcRemark) {
 		ProduceType type = null;
 		for (Sn sn : sns) {
 			if (FinalResult.OK.equals(finalResult)) {
@@ -299,13 +332,14 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 			} else if (FinalResult.NG.equals(finalResult)) {
 				sn.setStatus(SnStatus.WAIT_L1KEYIN);
 				sn.setOqcResult("NG");
+				sn.setOqcRemark(oqcRemark);//
 				
 				type = ProduceType.OQC_NG;
 			}
 			
 			doModifySn(sn);
 			
-			snProduceService.doFinal(sn.getSnId(), currentUserId(), type, finalResult.name(), null);
+			snProduceService.doFinal(sn.getSnId(), currentUserId(), type, finalResult.name(), oqcRemark);//
 		}
 	}
 	
@@ -464,5 +498,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
     		job.print();  
 //		}
 	}
+
+
 
 }

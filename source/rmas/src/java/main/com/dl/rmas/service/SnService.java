@@ -1,5 +1,6 @@
 package com.dl.rmas.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.dl.rmas.common.enums.FinalResult;
@@ -38,6 +39,19 @@ public interface SnService extends BaseService {
 	 */
 	Long queryTwiceBackTimesBySn(String sn);
 	/**
+	 * 查询指定sn的doresult状态
+	 */
+	String queryFinalResultBySn(String sn);
+	
+	/**
+	 * 查询指定sn的DODate(出货日期)
+	 */
+	Timestamp queryDODateBySn(String sn);
+	/**
+	 * 查询指定sn的StopReason
+	 */
+	String queryStopReasonBySn(String sn);
+	/**
 	 * 查询指定sn是否在保
 	 * 
 	 * @param sn
@@ -63,7 +77,7 @@ public interface SnService extends BaseService {
 	
 	void doQc(List<Sn> sns, FinalResult finalResult, IF materialUsed, String qcRemark);
 
-	void doOQc(List<Sn> sns, FinalResult finalResult);
+	void doOQc(List<Sn> sns, FinalResult finalResult, String oqcRemark);
 	
 	void doKeyout(List<Sn> sns);
 	
