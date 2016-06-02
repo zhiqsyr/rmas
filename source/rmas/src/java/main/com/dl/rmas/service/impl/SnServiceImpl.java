@@ -20,6 +20,7 @@ import net.sf.jxls.transformer.XLSTransformer;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -293,7 +294,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 	
 	@Override
 	public void doQc(List<Sn> sns, FinalResult finalResult, IF materialUsed,
-			String qcRemark) {
+			String macImei1N, String qcRemark) {
 		ProduceType type = null;
 		for (Sn sn : sns) {
 			if (FinalResult.OK.equals(finalResult)) {
@@ -309,6 +310,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 				type = ProduceType.QC_NG;
 			}
 			
+			sn.setMacImei1N(macImei1N);
 			sn.setMaterialUsed(materialUsed);
 			sn.setQcer(currentUserId());
 			sn.setQcRemark(qcRemark);
@@ -495,8 +497,14 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
         PrinterJob job = PrinterJob.getPrinterJob();  
         job.setPageable(book);  
 //    	if (job.printDialog()) {
-    		job.print();  
+//    		job.print();  
 //		}
+        
+        try {
+        	job.print();  
+		} catch (Exception e) {
+			LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
+		}
 	}
 
 

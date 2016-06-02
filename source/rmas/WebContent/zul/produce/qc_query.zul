@@ -52,6 +52,7 @@
 	checkmark="true">
 	<listhead>
 		<listheader width="60px" align="center"></listheader>
+		<listheader label="${c:l('p.operation')}" width="70px" align="center"></listheader>
 		<listheader label="SN" width="190px" sort="auto(sn)" 
 				onSort="@command('onSort', prop='sn', ascending=event.ascending)"></listheader>
 		<listheader label="${c:l('hard.level')}" width="90px" sort="auto(hardLevel)" 
@@ -68,11 +69,13 @@
 				onSort="@command('onSort', prop='macImei1', ascending=event.ascending)"></listheader>
 		<listheader label="IMEI2" width="140px" sort="auto(macImei2)" 
 				onSort="@command('onSort', prop='macImei2', ascending=event.ascending)"></listheader>
-		<listheader label="${c:l('p.operation')}" width="70px" align="center"></listheader>
 	</listhead>
 	<template name="model" var="item">
 		<listitem>
 			<listcell></listcell>
+			<listcell>
+				<toolbarbutton image="/common/images/itemEdit.gif" tooltiptext="${c:l('p.edit.imei')}" onClick="@command('onEditImei', sn=item)"></toolbarbutton>
+			</listcell>			
 			<listcell>
 				<label value="@load(item.sn)" tooltiptext="@load(item.sn)" sclass="texthidenstyle"></label>
 			</listcell>
@@ -92,9 +95,6 @@
 			</listcell>
 			<listcell>
 				<label value="@load(item.macImei2)" tooltiptext="@load(item.macImei2)" sclass="texthidenstyle"></label>
-			</listcell>
-			<listcell>
-				<toolbarbutton image="/common/images/itemEdit.gif" tooltiptext="${c:l('p.edit.imei')}" onClick="@command('onEditImei', sn=item)"></toolbarbutton>
 			</listcell>
 		</listitem>
 	</template>

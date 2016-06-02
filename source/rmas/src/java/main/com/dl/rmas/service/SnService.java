@@ -75,7 +75,7 @@ public interface SnService extends BaseService {
 	
 	void doRepair(List<Sn> sns, RepairResult repairResult, Integer repairCode, IF materialUsed, String repairRemark);
 	
-	void doQc(List<Sn> sns, FinalResult finalResult, IF materialUsed, String qcRemark);
+	void doQc(List<Sn> sns, FinalResult finalResult, IF materialUsed, String macImei1N, String qcRemark);
 
 	void doOQc(List<Sn> sns, FinalResult finalResult, String oqcRemark);
 	
