@@ -148,7 +148,7 @@ public class QcResultVM extends BaseVM {
 			// 判定 New Imei1是否必填，必填的话校验非空
 			Product product = baseService.queryById(Product.class, sns.get(0).getProductId());
 			DictCode dictCode = baseService.queryById(DictCode.class, product.getProductType());
-			if ("YES".equals(dictCode.getCodeKey())) {	// productType对应codeKey="YES"时，必填New Imei1
+			if (dictCode.getCodeOrder() != null && dictCode.getCodeOrder() == 1) {	// productType对应codeOrder=1时，必填New Imei1
 				if (StringUtils.isBlank(macImei1N)) {
 					showWarningBox("New IMEI1 should not be empty.");
 					return;
