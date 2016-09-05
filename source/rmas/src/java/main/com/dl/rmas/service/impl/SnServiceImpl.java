@@ -288,6 +288,9 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 			
 			doModifySn(sn);
 			
+			if ("NG".equals(sn.getQcResult())) {	// 在工程师维修的绩效数据统计中，不记录QC NG后维修的产品
+				continue;
+			}
 			snProduceService.doFinishRepair(sn.getSnId(), currentUserId(), type, sn.getStatus().name(), repairRemark, repairCode);
 		}
 	}
@@ -304,7 +307,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 				
 				type = ProduceType.QC;
 			} else if (FinalResult.NG.equals(finalResult)) {
-				sn.setStatus(SnStatus.WAIT_L1KEYIN);
+				sn.setStatus(SnStatus.WAIT_REPAIRING);	// WAIT_L1KEYIN -> WAIT_REPAIRING
 				sn.setQcResult("NG");
 				
 				type = ProduceType.QC_NG;
