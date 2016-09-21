@@ -280,18 +280,17 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 				type = ProduceType.REPAIR_NG;
 			}
 			
+			if (sn.getRepairer() != null) {		// 从未维修过，记录维修绩效
+												// 在工程师维修的绩效数据统计中，不记录QC NG后维修的产品
+				snProduceService.doFinishRepair(sn.getSnId(), currentUserId(), type, sn.getStatus().name(), repairRemark, repairCode);
+			}
+			
 			sn.setMaterialUsed(materialUsed);
 			sn.setRepairCode(repairCode);
 			sn.setRepairer(currentUserId());
 			sn.setRepairRemark(repairRemark);
 			sn.setRepairedTime(currentTime());
-			
 			doModifySn(sn);
-			
-			if ("NG".equals(sn.getQcResult())) {	// 在工程师维修的绩效数据统计中，不记录QC NG后维修的产品
-				continue;
-			}
-			snProduceService.doFinishRepair(sn.getSnId(), currentUserId(), type, sn.getStatus().name(), repairRemark, repairCode);
 		}
 	}
 	
@@ -307,7 +306,12 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 				
 				type = ProduceType.QC;
 			} else if (FinalResult.NG.equals(finalResult)) {
-				sn.setStatus(SnStatus.WAIT_REPAIRING);	// WAIT_L1KEYIN -> WAIT_REPAIRING
+				if (sn.getRepairer() == null) {				// Flash -> QC NG -> Wait L1keyin
+					sn.setStatus(SnStatus.WAIT_L1KEYIN);
+				} else {
+					sn.setStatus(SnStatus.WAIT_REPAIRING);	// Repair -> QC NG -> Wait Repair
+				}
+				
 				sn.setQcResult("NG");
 				
 				type = ProduceType.QC_NG;
