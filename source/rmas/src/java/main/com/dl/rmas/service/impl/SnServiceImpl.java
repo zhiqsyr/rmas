@@ -20,6 +20,7 @@ import net.sf.jxls.transformer.XLSTransformer;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.hibernate.cfg.annotations.Nullability;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -469,7 +470,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		args.put("sn", sn.getSn());
 		Product product = queryById(Product.class, sn.getProductId());
 		args.put("part.cust", product.getPn());
-		args.put("warr", sn.getKeepStatus().name());
+		args.put("warr", sn.getKeepStatus() == null ? "" : sn.getKeepStatus().name());
 		
 		args.put("brand", StringUtils.isBlank(product.getBrand()) ? "" : product.getBrand());
 		args.put("r.t", sn.getTwiceBackTimes().toString());
