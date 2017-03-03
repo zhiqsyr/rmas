@@ -38,8 +38,11 @@ public class ProduceDto {
 	private String repairRemark;
 	private String repairResult;
 	private String materialUsed;
+	private String itemCate;
 	private String partName;
 	private String cate;
+	private String materialNo;
+	private String ino;
 	private String usedAmount;
 	private String qcerName;
 	private String qcerNo;
@@ -251,6 +254,12 @@ public class ProduceDto {
 	public void setMaterialUsed(String materialUsed) {
 		this.materialUsed = materialUsed;
 	}
+	public String getItemCate() {
+		return itemCate == null ? "" : itemCate;
+	}
+	public void setItemCate(String itemCate) {
+		this.itemCate = itemCate;
+	}
 	public String getPartName() {
 		return partName == null ? "" : partName;
 	}
@@ -262,6 +271,18 @@ public class ProduceDto {
 	}
 	public void setCate(String cate) {
 		this.cate = cate;
+	}
+	public String getMaterialNo() {
+		return materialNo == null ? "" : materialNo;
+	}
+	public void setMaterialNo(String materialNo) {
+		this.materialNo = materialNo;
+	}
+	public String getIno() {
+		return ino == null ? "" : ino;
+	}
+	public void setIno(String ino) {
+		this.ino = ino;
 	}
 	public String getUsedAmount() {
 		return usedAmount == null ? "" : usedAmount;

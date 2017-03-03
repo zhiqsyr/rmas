@@ -437,9 +437,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		Map<String, Object> beans = new HashMap<String, Object>();
 		beans.put("sns", sns);
 		
-		// TODO del for deploy
-		String tmp = "/Users/zhiqsyr/dev/temp";
-		String path = tmp + "/data/rmas/ComprehensiveSearch/";
+		String path = "/data/rmas/ComprehensiveSearch/";
 		
 		// 1）生成EXCEL
 		XLSTransformer transformer = new XLSTransformer();
