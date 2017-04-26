@@ -1,0 +1,5 @@
+.DS_Store
+/source/rmas/.idea/*
+*.iml
+/source/rmas/out/*
+classes/*
