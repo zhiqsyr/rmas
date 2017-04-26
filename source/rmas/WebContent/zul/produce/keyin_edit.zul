@@ -1,3 +1,4 @@
+
 <?import src="/zul/system/common_init.zul" directives="*"?>
 <?page contentType="text/html;charset=UTF-8"?>
 

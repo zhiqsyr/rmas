@@ -1,5 +1,7 @@
 package com.dl.rmas.web.vm.produce;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -229,11 +231,25 @@ public class KeyinEditVM extends BaseVM {
 		
 		int times = snService.queryTwiceBackTimesBySn(sn).intValue();
 		this.sn.setTwiceBackTimes(times);
-		if (times == 0) {
-			this.sn.setKeepStatus(KeepStatus.NEW);
-		} else {
-			this.sn.setKeepStatus(snService.querySnIsKeeping(sn) ? KeepStatus.WITHIN : KeepStatus.WITHOUT);
+		
+		String finalResult = snService.queryFinalResultBySn(sn);
+		String stopReason = snService.queryStopReasonBySn(sn);
+		Timestamp doDate = snService.queryDODateBySn(sn);
+		String dod = "";
+		if (doDate != null) {
+			dod = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(doDate);
 		}
+				
+			if (times == 0) {
+				this.sn.setKeepStatus(KeepStatus.NEW);
+			} else {
+				if (finalResult != null && "OK".equals(finalResult)) {
+					this.sn.setKeepStatus(snService.querySnIsKeeping(sn) ? KeepStatus.WITHIN : KeepStatus.WITHOUT);
+				}else{
+					this.sn.setKeepStatus(KeepStatus.NEW);
+				}
+				showInformationBox("FinalResult:\t\t\t"+finalResult+"\n"+"DODate:\t\t\t"+dod+"\n"+"StopReason:\t\t\t"+stopReason);
+			}
 	}
 	
 	@Command

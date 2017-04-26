@@ -19,11 +19,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
+import com.dl.rmas.common.enums.FinalResult;
 import com.dl.rmas.common.enums.SnStatus;
+import com.dl.rmas.dto.DODateDto;
+import com.dl.rmas.dto.FinalResultDto;
 import com.dl.rmas.dto.NumberDto;
 import com.dl.rmas.dto.ProduceDto;
 import com.dl.rmas.dto.RepairingDto;
 import com.dl.rmas.dto.SnDto;
+import com.dl.rmas.dto.StopReasonDto;
 import com.dl.rmas.entity.Order.RmaDoStatus;
 import com.dl.rmas.entity.Sn;
 import com.dl.rmas.web.zkmodel.PagingDto;
@@ -186,7 +190,7 @@ public class SnDao extends BaseDao {
 		sql.append("	s.status, flasher.user_name flasherName, flasher.user_no flasherNo, s.flash_result flashResult,");
 		sql.append("	repairer.user_name repairerName, repairer.user_no repairerNo, code.code_name repairCode,");
 		sql.append("	s.repair_remark repairRemark, s.repair_result repairResult, s.material_used materialUsed,");
-		sql.append("	b.material_name partName, b.category cate, rm.number usedAmount, qcer.user_name qcerName, qcer.user_no qcerNo,");
+		sql.append("	b.material_name partName, b.category cate, b.item_cate itemCate, b.material_no materialNo, b.ino ino, rm.number usedAmount, qcer.user_name qcerName, qcer.user_no qcerNo,");
 		sql.append("	s.qc_result qcResult, stoper.user_name stoperName, stoper.user_no stoperNo, s.stop_reason stopReason,");
 		sql.append("	s.final_result finalResult, s.keep_status keepStatus, s.mac_imei1 macImei1, s.mac_imei1_n macImei1N,");
 		sql.append("	s.mac_imei2 macImei2, s.mac_imei2_n macImei2N, ");
@@ -348,6 +352,69 @@ public class SnDao extends BaseDao {
 		
 		return q.list();
 	}
+	
+	
+	/**
+	 * 查询指定sn的doresult状态 
+	 * 
+	 * @param sn
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public String findFinalresult(String sn){
+		String sql = "SELECT s.final_result as finalResult FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
+				.setResultTransformer(Transformers.aliasToBean(FinalResultDto.class));
+		List<FinalResultDto> result = q.list();
+		if (result != null) {
+			return result.get(0).getFinalResult();
+			
+		}
+		return null;
+	}
+	
+	/**
+	 * 查询指定sn的出货时间
+	 * 
+	 * @param sn
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Timestamp findDODate(String sn) {
+		String sql = "SELECT s.do_time as doDate FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
+				.setResultTransformer(Transformers.aliasToBean(DODateDto.class));
+		List<DODateDto> result = q.list();
+		if (result != null) {
+			return result.get(0).getDoDate();
+			
+		}
+		return null;	
+		
+	}
+	
+	/**
+	 * 查询指定sn的StopReason
+	 * 
+	 * @param sn
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public String findStopReason(String sn) {
+		String sql = "SELECT s.stop_reason as stopReason FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
+				.setResultTransformer(Transformers.aliasToBean(StopReasonDto.class));
+		List<StopReasonDto> result = q.list();
+		if (result != null) {
+			return result.get(0).getStopReason();
+			
+		}
+		return null;
+	}
+	
+	
+	
+	
 	
 	/**
 	 * 查询指定sn的二反次数

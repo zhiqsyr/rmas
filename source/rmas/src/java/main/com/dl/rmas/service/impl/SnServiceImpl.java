@@ -7,6 +7,7 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ import net.sf.jxls.transformer.XLSTransformer;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.hibernate.cfg.annotations.Nullability;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -130,6 +133,38 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		
 		return snDao.findTwiceBackTimesBySn(sn);
 	}
+	
+
+	@Override
+	public String queryFinalResultBySn(String sn) {
+		if (StringUtils.isBlank(sn)) {
+			return null;
+		}
+		
+		return snDao.findFinalresult(sn);
+	}
+	
+	@Override
+	public Timestamp queryDODateBySn(String sn) {
+		if (StringUtils.isBlank(sn)) {
+			return null;
+		}
+		
+		return snDao.findDODate(sn);
+	}
+
+	@Override
+	public String queryStopReasonBySn(String sn) {
+		if (StringUtils.isBlank(sn)) {
+			return null;
+		}
+		
+		return snDao.findStopReason(sn);
+	}
+
+	
+	
+	
 	
 	@Override
 	public boolean querySnIsKeeping(String sn) {
@@ -246,21 +281,23 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 				type = ProduceType.REPAIR_NG;
 			}
 			
+			if (sn.getRepairer() != null) {		// 从未维修过，记录维修绩效
+												// 在工程师维修的绩效数据统计中，不记录QC NG后维修的产品
+				snProduceService.doFinishRepair(sn.getSnId(), currentUserId(), type, sn.getStatus().name(), repairRemark, repairCode);
+			}
+			
 			sn.setMaterialUsed(materialUsed);
 			sn.setRepairCode(repairCode);
 			sn.setRepairer(currentUserId());
 			sn.setRepairRemark(repairRemark);
 			sn.setRepairedTime(currentTime());
-			
 			doModifySn(sn);
-			
-			snProduceService.doFinishRepair(sn.getSnId(), currentUserId(), type, sn.getStatus().name(), repairRemark, repairCode);
 		}
 	}
 	
 	@Override
 	public void doQc(List<Sn> sns, FinalResult finalResult, IF materialUsed,
-			String qcRemark) {
+			String macImei1N, String qcRemark) {
 		ProduceType type = null;
 		for (Sn sn : sns) {
 			if (FinalResult.OK.equals(finalResult)) {
@@ -270,12 +307,18 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 				
 				type = ProduceType.QC;
 			} else if (FinalResult.NG.equals(finalResult)) {
-				sn.setStatus(SnStatus.WAIT_L1KEYIN);
+				if (sn.getRepairer() == null) {				// Flash -> QC NG -> Wait L1keyin
+					sn.setStatus(SnStatus.WAIT_L1KEYIN);
+				} else {
+					sn.setStatus(SnStatus.WAIT_REPAIRING);	// Repair -> QC NG -> Wait Repair
+				}
+				
 				sn.setQcResult("NG");
 				
 				type = ProduceType.QC_NG;
 			}
 			
+			sn.setMacImei1N(macImei1N);
 			sn.setMaterialUsed(materialUsed);
 			sn.setQcer(currentUserId());
 			sn.setQcRemark(qcRemark);
@@ -288,7 +331,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 	}
 	
 	@Override
-	public void doOQc(List<Sn> sns, FinalResult finalResult) {
+	public void doOQc(List<Sn> sns, FinalResult finalResult, String oqcRemark) {
 		ProduceType type = null;
 		for (Sn sn : sns) {
 			if (FinalResult.OK.equals(finalResult)) {
@@ -299,13 +342,14 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 			} else if (FinalResult.NG.equals(finalResult)) {
 				sn.setStatus(SnStatus.WAIT_L1KEYIN);
 				sn.setOqcResult("NG");
+				sn.setOqcRemark(oqcRemark);//
 				
 				type = ProduceType.OQC_NG;
 			}
 			
 			doModifySn(sn);
 			
-			snProduceService.doFinal(sn.getSnId(), currentUserId(), type, finalResult.name(), null);
+			snProduceService.doFinal(sn.getSnId(), currentUserId(), type, finalResult.name(), oqcRemark);//
 		}
 	}
 	
@@ -393,9 +437,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		Map<String, Object> beans = new HashMap<String, Object>();
 		beans.put("sns", sns);
 		
-		// TODO del for deploy
-		String tmp = "/Users/zhiqsyr/dev/temp";
-		String path = tmp + "/data/rmas/ComprehensiveSearch/";
+		String path = "/data/rmas/ComprehensiveSearch/";
 		
 		// 1）生成EXCEL
 		XLSTransformer transformer = new XLSTransformer();
@@ -426,7 +468,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		args.put("sn", sn.getSn());
 		Product product = queryById(Product.class, sn.getProductId());
 		args.put("part.cust", product.getPn());
-		args.put("warr", sn.getKeepStatus().name());
+		args.put("warr", sn.getKeepStatus() == null ? "" : sn.getKeepStatus().name());
 		
 		args.put("brand", StringUtils.isBlank(product.getBrand()) ? "" : product.getBrand());
 		args.put("r.t", sn.getTwiceBackTimes().toString());
@@ -461,8 +503,16 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
         PrinterJob job = PrinterJob.getPrinterJob();  
         job.setPageable(book);  
 //    	if (job.printDialog()) {
-    		job.print();  
+//    		job.print();  
 //		}
+        
+        try {
+        	job.print();  
+		} catch (Exception e) {
+			LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
+		}
 	}
+
+
 
 }

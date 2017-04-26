@@ -85,7 +85,8 @@
 		<listheader label="${c:l('close.date')}" width="90px" sort="auto(order.closeTime)" 
 				onSort="@command('onSort', prop='order.closeTime', ascending=event.ascending)"></listheader>
 		<listheader label="Repair Remark" width="120px"></listheader>	
-		<listheader label="QC NG Remark" width="120px"></listheader>		
+		<listheader label="QC NG Remark" width="120px"></listheader>
+		<listheader label="OQC NG Remark" width="120px"></listheader>		
 	</listhead>
 	<template name="model" var="item">
 		<listitem>
@@ -115,7 +116,10 @@
 			</listcell>				
 			<listcell>
 				<label value="@load(item.qcRemark)" tooltiptext="@load(item.qcRemark)" sclass="texthidenstyle"></label>
-			</listcell>			
+			</listcell>	
+			<listcell>
+				<label value="@load(item.oqcRemark)" tooltiptext="@load(item.oqcRemark)" sclass="texthidenstyle"></label>
+			</listcell>		
 		</listitem>
 	</template>
 </listbox>

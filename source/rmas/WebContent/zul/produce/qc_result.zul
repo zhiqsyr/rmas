@@ -7,17 +7,26 @@
 <borderlayout width="100%" height="100%">
 <center>
 <div>
-<div align="center" style="margin-top:10px">
-	<label value="${c:l('p.qc.result')}"></label>
-	<label value="@load(vm.qcResult)" style="margin-left:25px"></label>
-</div>
-
-<div align="center" style="margin-top:10px">
-<hbox align="center">
-	<label value="${c:l('p.remark')}"></label>
-	<textbox style="margin-left:25px" value="@bind(vm.qcRemark)" rows="5" width="500px"></textbox>
-</hbox>
-</div>
+<grid>
+	<columns>
+		<column width="25%" align="right"></column>
+		<column></column>
+	</columns>
+	<rows>
+		<row>
+			<label value="${c:l('p.qc.result')}"></label>
+			<label value="@load(vm.qcResult)"></label>
+		</row>
+		<row>
+			<label value="New IMEI1"></label>
+			<textbox value="@bind(vm.macImei1N)" width="500px"></textbox>		
+		</row>
+		<row>
+			<label value="${c:l('p.remark')}"></label>
+			<textbox value="@bind(vm.qcRemark)" rows="5" width="500px"></textbox>		
+		</row>
+	</rows>
+</grid>
 
 <groupbox style="margin-top:10px" visible="@load(vm.qcResult eq 'OK')">
 	<caption label="${c:l('p.material.used')}"></caption>
@@ -115,8 +124,8 @@
 </center>
 <south>
 <div align="center">
-	<button image="/common/images/itemConfirm.gif" label="确认" onClick="@command('onSubmit')"></button>
-	<button image="/common/images/stop.gif" label="取消" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
+	<button image="/common/images/itemConfirm.gif" label="Confirm" onClick="@command('onSubmit')"></button>
+	<button image="/common/images/stop.gif" label="Cancel" sclass="buttonSpace" onClick="spaceOwner.detach()"></button>
 </div>
 </south>
 </borderlayout>

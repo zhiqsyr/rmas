@@ -3,6 +3,7 @@ package com.dl.rmas.web.vm.produce;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -21,8 +22,11 @@ import com.dl.rmas.common.cache.Constants;
 import com.dl.rmas.common.enums.FinalResult;
 import com.dl.rmas.common.enums.IF;
 import com.dl.rmas.entity.Bom;
+import com.dl.rmas.entity.DictCode;
+import com.dl.rmas.entity.Product;
 import com.dl.rmas.entity.Sn;
 import com.dl.rmas.entity.SnRepairMaterial;
+import com.dl.rmas.service.BaseService;
 import com.dl.rmas.service.BomService;
 import com.dl.rmas.service.SnRepairMaterialService;
 import com.dl.rmas.service.SnService;
@@ -39,11 +43,14 @@ public class QcResultVM extends BaseVM {
 	private SnRepairMaterialService snRepairMaterialService;
 	@WireVariable
 	private BomService bomService;
+	@WireVariable
+	private BaseService baseService;
 	
 	private List<Sn> sns;
 	private Integer snId;
 	private FinalResult qcResult;
 	private String qcRemark;
+	private String macImei1N;
 	private SnRepairMaterial editMaterial;
 	private Bom selectedBom;
 	private List<Bom> boms;
@@ -61,6 +68,7 @@ public class QcResultVM extends BaseVM {
 		
 		sns = getArgValue(List.class, L1keyinQueryVM.KEY_SNS);
 		snId = sns.get(0).getSnId();
+		macImei1N = sns.get(0).getMacImei1N();
 		qcResult = getArgValue(FinalResult.class, KEY_QC_RESULT);
 		
 //		materialNameLableValueBeans = labelValueBeanService.buildBomMaterialNameWithSelect(sns.get(0).getProductId());
@@ -135,6 +143,19 @@ public class QcResultVM extends BaseVM {
 	
 	@Command
 	public void onSubmit() {
+		// QC OK 时，校验 New Imei1
+		if (FinalResult.OK.equals(qcResult)) {
+			// 判定 New Imei1是否必填，必填的话校验非空
+			Product product = baseService.queryById(Product.class, sns.get(0).getProductId());
+			DictCode dictCode = baseService.queryById(DictCode.class, product.getProductType());
+			if (dictCode.getCodeOrder() != null && dictCode.getCodeOrder() == 1) {	// productType对应codeOrder=1时，必填New Imei1
+				if (StringUtils.isBlank(macImei1N)) {
+					showWarningBox("New IMEI1 should not be empty.");
+					return;
+				}
+			}			
+		}
+		
 		IF materialUsed = result.size() > 0 ? IF.YES : IF.NO;
 		if (FinalResult.NG.equals(qcResult)) {
 			for (SnRepairMaterial material : result) {
@@ -143,7 +164,7 @@ public class QcResultVM extends BaseVM {
 			materialUsed = IF.NO;
 		}
 		 
-		snService.doQc(sns, qcResult, materialUsed, qcRemark);
+		snService.doQc(sns, qcResult, materialUsed, macImei1N, qcRemark);
 		
 		showInformationBox(Constants.OPERATION_COMPLETED);
 		editWin.detach();
@@ -159,6 +180,14 @@ public class QcResultVM extends BaseVM {
 
 	public void setQcRemark(String qcRemark) {
 		this.qcRemark = qcRemark;
+	}
+
+	public String getMacImei1N() {
+		return macImei1N;
+	}
+
+	public void setMacImei1N(String macImei1N) {
+		this.macImei1N = macImei1N;
 	}
 
 	public Bom getSelectedBom() {

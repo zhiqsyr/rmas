@@ -2,6 +2,7 @@ package com.dl.rmas.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,11 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 	
 	@Override
 	public User queryUserAtLogin(User user) {
-		user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+		if (user == null || StringUtils.isBlank(user.getPassword())) {
+			return null;
+		}
 		
+		user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
 		List<User> result = queryByExample(user);
 		if (result.size() == 1 && result.get(0).getUserNo().equals(user.getUserNo())) {
 			return result.get(0);
