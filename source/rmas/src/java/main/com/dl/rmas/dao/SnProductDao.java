@@ -146,7 +146,7 @@ public class SnProductDao extends BaseDao {
 			sql.append(" and ifnull(s.flash_time, s.repaired_time) <= ? ");
 			params.add(DateUtils.addDays(query.getOperateTimeTo(), 1));
 		}
-		sql.append(" group by u.user_no, u.user_name ");
+		sql.append(" group by u.user_id, u.user_no, u.user_name ");
 		sql.append(" union all ");
 		sql.append(" select u.user_no, u.user_name, 'QC',  ");
 		sql.append(" 	count(1), sum(case s.repair_code when 1 then 1 when 46 then 1 else 0 end) escTimes, ");
@@ -175,7 +175,7 @@ public class SnProductDao extends BaseDao {
 			sql.append(" and s.qc_time <= ? ");
 			params.add(DateUtils.addDays(query.getOperateTimeTo(), 1));
 		}		
-		sql.append(" group by u.user_no, u.user_name ");
+		sql.append(" group by u.user_id, u.user_no, u.user_name ");
 		
 		return jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper(EmployeeReturnStatis.class));
 	}
