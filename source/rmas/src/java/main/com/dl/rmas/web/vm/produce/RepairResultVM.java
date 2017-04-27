@@ -1,6 +1,7 @@
 package com.dl.rmas.web.vm.produce;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.zkoss.bind.annotation.BindingParam;
@@ -58,7 +59,7 @@ public class RepairResultVM extends BaseVM {
 	private SnRepairMaterial editMaterial;
 	private Bom selectedBom;
 	private List<Bom> boms;
-	private List<Bom> _4Slts;
+	private List<Bom> _4Slts = new LinkedList<Bom>();
 	private List<SnRepairMaterial> result;
 	
 	@Wire
@@ -102,11 +103,13 @@ public class RepairResultVM extends BaseVM {
 	 */
 	@Command
 	@NotifyChange("_4Slts")
-	public void onListBoms(@BindingParam("_4Pre")String _4Pre) {
+	public void onListBoms(@BindingParam("_4Pre")String _4Pre, @BindingParam("type")String type) {
 		_4Slts = new ArrayList<Bom>();
 		
 		for (Bom vo : boms) {
-			if (vo.getMaterialName().toUpperCase().contains(_4Pre.toUpperCase())) {
+			if ("NAME".equals(type) && vo.getMaterialName().toUpperCase().contains(_4Pre.toUpperCase())) {
+				_4Slts.add(vo);
+			} else if ("INO".equals(type) && vo.getIno() != null && vo.getIno().toUpperCase().contains(_4Pre.toUpperCase())) {
 				_4Slts.add(vo);
 			}
 		}
@@ -122,11 +125,16 @@ public class RepairResultVM extends BaseVM {
 		}
 		
 		bb.close();
-	}		
+	}
 	
 	@Command
 	@NotifyChange({"result", "editMaterial", "selectedBom"})
 	public void onEditMaterial() {
+		if (selectedBom == null) {
+			showWarningBox("Please select a bom.");
+			return;
+		}
+
 		editMaterial.setSnId(snId);
 		editMaterial.setBomId(selectedBom.getBomId());
 		snRepairMaterialService.doCreateOrModify(editMaterial);

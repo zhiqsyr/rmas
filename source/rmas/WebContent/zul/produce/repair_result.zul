@@ -38,16 +38,17 @@
 	<caption label="${c:l('p.material.used')}"></caption>
 	<grid>
 		<columns>
-			<column width="15%" align="right"></column>
-			<column width="50%"></column>
-			<column width="15%" align="right"></column>
+			<column width="13%" align="right"></column>
+			<column width="22%"></column>
+			<column width="13%" align="right"></column>
+			<column width="19%"></column>
+			<column width="13%" align="right"></column>
 			<column></column>
 			<column width="10%"></column>
 		</columns>
 		<rows>
 			<row>
 				<span>
-					<label value="*" style="color:red"></label>
 					<label value="${c:l('p.material.name')}"></label>
 				</span>
 				<!-- 
@@ -59,7 +60,7 @@
 					</template>
 				</listbox>
 				 -->
-				<bandbox id="bb" onChanging="@command('onListBoms', _4Pre=event.value)" width="310px"
+				<bandbox id="bb" onChanging="@command('onListBoms', _4Pre=event.value, type='NAME')" width="150px"
 					style="text-transform:uppercase;" value="@bind(vm.selectedBom) @converter('com.dl.rmas.web.converter.BomMaterialNameConverter')"
 				    buttonVisible="true" autodrop="true">
 					<bandpopup height="265px">
@@ -77,7 +78,25 @@
 							</listbox>
 						</vbox>									
 					</bandpopup>
-				</bandbox>					
+				</bandbox>
+				<label value="Part Loc"></label>
+				<bandbox id="plBb" onChanging="@command('onListBoms', _4Pre=event.value, type='INO')" width="150px"
+						 style="text-transform:uppercase;" value="@bind(vm.selectedBom) @converter('com.dl.rmas.web.converter.BomInoConverter')"
+						 buttonVisible="true" autodrop="true">
+					<bandpopup height="350px">
+						<vbox width="310px">
+							<listbox id="plSltLb" width="100%"
+									 mold="paging" pageSize="10"
+									 model="@load(vm._4Slts)" onSelect="@command('onSlt', sltLb=plSltLb, bb=plBb)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item.ino)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</vbox>
+					</bandpopup>
+				</bandbox>
 				<span>
 					<label value="*" style="color:red"></label>
 					<label value="${c:l('p.material.number')}"></label>
@@ -96,9 +115,9 @@
 			<listheader label="${c:l('p.material.name')}"></listheader>
 			<listheader label="${c:l('p.manufacturer.model')}" width="30%"></listheader>
 			<listheader label="${c:l('p.material.no')}" width="20%"></listheader>
-			<listheader label="${c:l('p.material.no')}" width="15%"></listheader>
-			<listheader label="${c:l('p.material.no')}" width="80px"></listheader>
-			<listheader label="${c:l('p.material.no')}" width="70px"></listheader>
+			<listheader label="Part Loc" width="15%"></listheader>
+			<listheader label="${c:l('p.material.number')}" width="100px"></listheader>
+			<listheader label="${c:l('operate')}" width="70px"></listheader>
 		</listhead>
 		<template name="model" var="item">
 			<listitem>

@@ -136,7 +136,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
 		
 		Map<String, Object> beans = new HashMap<String, Object>();
 		beans.put("tracks", tracks);
-		String path = "/data/rmas/ReportForms/";
+		String path = "/Users/zhiqsyr/tmp/data/rmas/ReportForms/";
 		
 		// 1）生成EXCEL
 		XLSTransformer transformer = new XLSTransformer();

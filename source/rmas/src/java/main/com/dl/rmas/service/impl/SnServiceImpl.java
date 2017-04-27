@@ -301,7 +301,8 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		ProduceType type = null;
 		for (Sn sn : sns) {
 			if (FinalResult.OK.equals(finalResult)) {
-				sn.setStatus(SnStatus.WAIT_DO);
+//				sn.setStatus(SnStatus.WAIT_DO);	// deleted by dongbz 20170427 进入OQC阶段
+				sn.setStatus(SnStatus.WAIT_OQC);
 				sn.setQcResult("OK");
 				sn.setFinalResult(finalResult);
 				
@@ -335,9 +336,10 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		ProduceType type = null;
 		for (Sn sn : sns) {
 			if (FinalResult.OK.equals(finalResult)) {
+				sn.setStatus(SnStatus.WAIT_DO);
 				sn.setFinalResult(finalResult);
 				sn.setOqcResult("OK");
-				
+
 				type = ProduceType.OQC_OK;
 			} else if (FinalResult.NG.equals(finalResult)) {
 				sn.setStatus(SnStatus.WAIT_L1KEYIN);

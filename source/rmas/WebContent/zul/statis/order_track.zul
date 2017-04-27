@@ -68,11 +68,13 @@
 			<listheader label="${c:l('receive.status')}" width="105px"></listheader>
 			<listheader label="${c:l('entry.status')}" width="110px"></listheader>
 			<listheader label="RMA DO Status" width="105px"></listheader>
+			<listheader label="Wait Keyin" width="95px"></listheader>
 			<listheader label="Wait L1keyin Midh" width="120px"></listheader>
 			<listheader label="Wait Flash" width="95px"></listheader>
 			<listheader label="Wait L1keyin Other" width="120px"></listheader>
 			<listheader label="Wait Repair" width="100px"></listheader>
 			<listheader label="Wait QC" width="85px"></listheader>
+			<listheader label="Wait OQC" width="85px"></listheader>
 			<listheader label="Wait DO" width="85px"></listheader>
 			<listheader label="Online" width="85px"></listheader>
 			<listheader label="Done" width="85px"></listheader>
@@ -95,11 +97,13 @@
 				<listcell label="@load(item.receiveStatus) @converter('com.dl.rmas.web.converter.EnumTypeStringConverter', clazz='com.dl.rmas.common.enums.ReceiveStatus')"></listcell>
 				<listcell label="@load(item.keyinStatus) @converter('com.dl.rmas.web.converter.EnumTypeStringConverter', clazz='com.dl.rmas.common.enums.KeyinStatus')"></listcell>
 				<listcell label="@load(item.doStatus)"></listcell>
+				<listcell label="@load(item.totalRemain)"></listcell>
 				<listcell label="@load(item.waitMidhCount)"></listcell>
 				<listcell label="@load(item.waitFlashCount)"></listcell>
 				<listcell label="@load(item.waitL1keyinCount)"></listcell>
 				<listcell label="@load(item.waitReparingCount)"></listcell>
 				<listcell label="@load(item.waitQcCount)"></listcell>
+				<listcell label="@load(item.waitOQcCount)"></listcell>
 				<listcell label="@load(item.waitDoCount)"></listcell>
 				<listcell label="@load(item.onlineCount)"></listcell>
 				<listcell label="@load(item.doneCount)"></listcell>

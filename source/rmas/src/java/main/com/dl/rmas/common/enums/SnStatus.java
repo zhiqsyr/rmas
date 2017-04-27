@@ -20,6 +20,8 @@ public enum SnStatus {
 	WAIT_QC,
 	
 //	WAIT_KEYOUT,
+
+	WAIT_OQC,
 	
 	WAIT_DO,
 	

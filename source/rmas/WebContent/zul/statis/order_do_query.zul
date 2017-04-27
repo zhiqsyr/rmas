@@ -39,15 +39,15 @@
 <center>
 <listbox width="100%" vflex="true" model="@load(vm.result)">
 	<listhead>
-		<listheader label="${c:l('doorder.rma.no')}" width="160px" sort="auto(doRma)" 
+		<listheader label="${c:l('doorder.rma.no')}" width="170px" sort="auto(doRma)"
 				onSort="@command('onSort', prop='doRma', ascending=event.ascending)"></listheader>
-		<listheader label="${c:l('customer.companyname')}" width="180px" sort="auto(customerId)" 
+		<listheader label="${c:l('customer.companyname')}" width="190px" sort="auto(customerId)"
 				onSort="@command('onSort', prop='customerId', ascending=event.ascending)"></listheader>
 		<listheader label="Excel" width="200px"></listheader>
 		<listheader label="PDF" width="210px"></listheader>
 		<listheader label="${c:l('do.operator')}" width="120px" sort="auto(dor)" 
 				onSort="@command('onSort', prop='dor', ascending=event.ascending)"></listheader>
-		<listheader label="${c:l('do.time')}" width="120px" sort="auto(doTime)" 
+		<listheader label="${c:l('do.time')}" width="120px" sort="auto(doTime)"
 				onSort="@command('onSort', prop='doTime', ascending=event.ascending)"></listheader>				
 	</listhead>
 	<template name="model" var="item">

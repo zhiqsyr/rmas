@@ -160,12 +160,13 @@ public class OrderDao extends BaseDao {
 			PagingDto pagingDto) {
 		StringBuffer sql = new StringBuffer();
 		sql.append(" SELECT o.order_id orderId, o.rma, o.custrma, o.close_time closeTime, ");
-		sql.append(" 	o.receive_status receiveStatus, o.keyin_status keyinStatus, o.total_qty totalQty, ");
+		sql.append(" 	o.receive_status receiveStatus, o.keyin_status keyinStatus, o.total_remain totalRemain, o.total_qty totalQty, ");
 		sql.append(" 	sum(CASE s.status WHEN 'WAIT_MIDH' THEN 1 ELSE 0 END) waitMidhCount, ");
 		sql.append(" 	sum(CASE s.status WHEN 'WAIT_FLASH' THEN 1 ELSE 0 END) waitFlashCount, ");
 		sql.append(" 	sum(CASE s.status WHEN 'WAIT_L1KEYIN' THEN 1 ELSE 0 END) waitL1keyinCount, ");
 		sql.append(" 	sum(CASE s.status WHEN 'WAIT_REPAIRING' THEN 1 ELSE 0 END) waitReparingCount, ");
 		sql.append(" 	sum(CASE s.status WHEN 'WAIT_QC' THEN 1 ELSE 0 END) waitQcCount, ");
+		sql.append(" 	sum(CASE s.status WHEN 'WAIT_OQC' THEN 1 ELSE 0 END) waitOQcCount, ");
 		sql.append(" 	sum(CASE s.status WHEN 'WAIT_DO' THEN 1 ELSE 0 END) waitDoCount, ");
 		sql.append(" 	sum(CASE s.status WHEN 'DONE' THEN 1 ELSE 0 END) doneCount ");
 		sql.append(" FROM t_sn s RIGHT JOIN t_order o ON s.order_id = o.order_id ");

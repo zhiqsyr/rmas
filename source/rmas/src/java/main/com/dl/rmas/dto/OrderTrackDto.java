@@ -17,12 +17,14 @@ public class OrderTrackDto {
 	private String receiveStatus;
 	private String keyinStatus;
 	
+	private String totalRemain;
 	private String totalQty;
 	private BigDecimal waitMidhCount;
 	private BigDecimal waitFlashCount;
 	private BigDecimal waitL1keyinCount;
 	private BigDecimal waitReparingCount;
 	private BigDecimal waitQcCount;
+	private BigDecimal waitOQcCount;
 	private BigDecimal waitDoCount;
 	private BigDecimal doneCount;
 	
@@ -62,6 +64,15 @@ public class OrderTrackDto {
 	public void setKeyinStatus(String keyinStatus) {
 		this.keyinStatus = keyinStatus;
 	}
+
+	public String getTotalRemain() {
+		return totalRemain;
+	}
+
+	public void setTotalRemain(String totalRemain) {
+		this.totalRemain = totalRemain;
+	}
+
 	public String getDoStatus() {
 		return doneCount.toString().equals(totalQty) ? "DONE" : "ONLINE";
 	}
@@ -101,6 +112,15 @@ public class OrderTrackDto {
 	public void setWaitQcCount(BigDecimal waitQcCount) {
 		this.waitQcCount = waitQcCount;
 	}
+
+	public BigDecimal getWaitOQcCount() {
+		return waitOQcCount;
+	}
+
+	public void setWaitOQcCount(BigDecimal waitOQcCount) {
+		this.waitOQcCount = waitOQcCount;
+	}
+
 	public BigDecimal getWaitDoCount() {
 		return waitDoCount;
 	}

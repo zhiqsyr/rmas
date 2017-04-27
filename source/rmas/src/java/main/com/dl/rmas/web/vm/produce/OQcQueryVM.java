@@ -34,8 +34,8 @@ public class OQcQueryVM extends PageVM {
 	@Init
 	public void init() {
 		snDto = new SnDto();
-		snDto.setOqcResult("OK");
-		snDto.setStatus(SnStatus.WAIT_DO);
+		snDto.setOqcResult("NG");	// 标识：查出oqc_result in (null, 'NG')
+		snDto.setStatus(SnStatus.WAIT_OQC);
 		
 		pagingDto.setPageSize(20);
 		onSearch();
