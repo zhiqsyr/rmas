@@ -48,28 +48,28 @@ public class OQcResultVM extends BaseVM {
 //	private Bom selectedBom;
 //	private List<Bom> boms;
 //	private List<Bom> _4Slts;
-////	private List<LabelValueBean<Bom>> materialNameLableValueBeans;
+//	private List<LabelValueBean<Bom>> materialNameLableValueBeans;
 //	private List<SnRepairMaterial> result;
 	
 	@Wire
 	private Window editWin2;
 	
-//zzzz	@SuppressWarnings("unchecked")
-//	@Init
-//	public void init(@ContextParam(ContextType.VIEW) Component view) {
-//		Selectors.wireComponents(view, this, false);
-//		
-//		sns = getArgValue(List.class, L1keyinQueryVM.KEY_SNS);
-//		snId = sns.get(0).getSnId();
-//		qcResult = getArgValue(FinalResult.class, KEY_OQC_RESULT);
-//		
-////		materialNameLableValueBeans = labelValueBeanService.buildBomMaterialNameWithSelect(sns.get(0).getProductId());
+	@SuppressWarnings("unchecked")
+	@Init
+	public void init(@ContextParam(ContextType.VIEW) Component view) {
+		Selectors.wireComponents(view, this, false);
+
+		sns = getArgValue(List.class, L1keyinQueryVM.KEY_SNS);
+		snId = sns.get(0).getSnId();
+		qcResult = getArgValue(FinalResult.class, KEY_OQC_RESULT);
+
+//		materialNameLableValueBeans = labelValueBeanService.buildBomMaterialNameWithSelect(sns.get(0).getProductId());
 //		boms = bomService.queryByProductId(sns.get(0).getProductId());
 //		_4Slts = boms;
 //		editMaterial = new SnRepairMaterial();
 //		result = snRepairMaterialService.queryBySnId(snId);
-//	}
-//
+	}
+
 //	/**
 //	 * <b>Function: <b>展示匹配结果
 //	 *
