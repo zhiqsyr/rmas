@@ -145,7 +145,8 @@
 		<listheader label="${c:l('l1keyin.date')}" width="100px"></listheader>
 		<listheader label="${c:l('repair.date')}" width="90px"></listheader>
 		<listheader label="${c:l('qc.date')}" width="80px"></listheader>				
-		<listheader label="${c:l('do.date')}" width="80px" sort="auto(doTime)" 
+		<listheader label="OQC Date" width="80px"></listheader>
+		<listheader label="${c:l('do.date')}" width="80px" sort="auto(doTime)"
 				onSort="@command('onSort', prop='doTime', ascending=event.ascending)"></listheader>				
 		<listheader label="${c:l('close.date')}" width="90px" sort="auto(order.closeTime)" 
 				onSort="@command('onSort', prop='order.closeTime', ascending=event.ascending)"></listheader>		
@@ -162,6 +163,9 @@
 		<listheader label="${c:l('qc.engineer')}" width="100px"></listheader>		
 		<listheader label="${c:l('qc.engineer.no')}" width="105px"></listheader>		
 		<listheader label="${c:l('qc.result')}" width="100px"></listheader>
+		<listheader label="OQC Engineer" width="100px"></listheader>
+		<listheader label="OQC Engineer No." width="110px"></listheader>
+		<listheader label="OQC Result" width="100px"></listheader>
 		<listheader label="Stoper Name" width="100px"></listheader>
 		<listheader label="Stoper No." width="100px"></listheader>
 		<listheader label="DO Result" width="100px"></listheader>
@@ -212,6 +216,7 @@
 			<listcell label="@load(item.assignTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
 			<listcell label="@load(item.repairedTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
 			<listcell label="@load(item.qcTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
+			<listcell label="@load(item.oqcTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
 			<listcell label="@load(item.doTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>
 			<listcell label="@load(item.order.closeTime) @converter('org.zkoss.bind.converter.FormatedDateConverter', format='yyyy-MM-dd')"></listcell>			
 			<listcell label="@load(item.status) @converter('com.dl.rmas.web.converter.EnumTypeConverter')"></listcell>			
@@ -256,6 +261,17 @@
 					tooltiptext="@load(item.qcer) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"></label>
 			</listcell>
 			<listcell label="@load(item.qcResult)"></listcell>
+			<listcell>
+				<label value="@load(item.oqcer) @converter('com.dl.rmas.web.converter.UserIdConverter')"
+					   sclass="texthidenstyle"
+					   tooltiptext="@load(item.oqcer) @converter('com.dl.rmas.web.converter.UserIdConverter')"></label>
+			</listcell>
+			<listcell>
+				<label value="@load(item.oqcer) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"
+					   sclass="texthidenstyle"
+					   tooltiptext="@load(item.oqcer) @converter('com.dl.rmas.web.converter.UserIdNoConverter')"></label>
+			</listcell>
+			<listcell label="@load(item.oqcResult)"></listcell>
 			<listcell>
 				<label value="@load(item.stoper) @converter('com.dl.rmas.web.converter.UserIdConverter')"
 					sclass="texthidenstyle"

@@ -335,6 +335,9 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 	public void doOQc(List<Sn> sns, FinalResult finalResult, String oqcRemark) {
 		ProduceType type = null;
 		for (Sn sn : sns) {
+			sn.setOqcer(currentUserId());
+			sn.setOqcTime(currentTime());
+
 			if (FinalResult.OK.equals(finalResult)) {
 				sn.setStatus(SnStatus.WAIT_DO);
 				sn.setFinalResult(finalResult);
@@ -440,7 +443,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 		beans.put("sns", sns);
 		
 		String path = "/data/rmas/ComprehensiveSearch/";
-		
+
 		// 1）生成EXCEL
 		XLSTransformer transformer = new XLSTransformer();
 		ClassPathResource cpr = new ClassPathResource(templatePath);

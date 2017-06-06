@@ -48,7 +48,7 @@
 			<auxheader colspan="2"></auxheader>
 			<auxheader colspan="3" label="Repair" align="center"></auxheader>
 			<auxheader colspan="3" label="QC" align="center"></auxheader>
-			<auxheader colspan="2" label="OQC" align="center"></auxheader>
+			<auxheader colspan="3" label="OQC" align="center"></auxheader>
 			<auxheader></auxheader>
 		</auxhead>
 		<listhead>
@@ -96,6 +96,7 @@
 			<listheader width="90px" align="center">
 				<a onClick="@command('onExportDetail', produceType='OQC_NG')" label="OQC NG"></a>
 			</listheader>
+			<listheader label="OQC Pass Rate" width="110px" align="center"/>
 			<listheader width="90px" align="center">
 				<a onClick="@command('onExportDetail', produceType='DO')" label="DO"></a>
 			</listheader>
@@ -125,6 +126,7 @@
 				<listcell label="@load(item.qcPassRate) @converter('org.zkoss.bind.converter.FormatedNumberConverter', format='##.##%')"></listcell>
 				<listcell label="@load(item.oqcCount)"></listcell>
 				<listcell label="@load(item.oqcNgCount)"></listcell>
+				<listcell label="@load(item.oqcPassRate) @converter('org.zkoss.bind.converter.FormatedNumberConverter', format='##.##%')"></listcell>
 				<listcell label="@load(item.doCount)"></listcell>
 			</listitem>
 		</template>

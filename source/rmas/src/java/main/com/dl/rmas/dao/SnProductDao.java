@@ -306,6 +306,8 @@ public class SnProductDao extends BaseDao {
 			sql.append(" and t.produce_type = 'QC' and t.result = 'OK' ");
 		} else if (ProduceType.QC_NG.equals(query.getProduceType())) {
 			sql.append(" and t.produce_type = 'QC_NG' ");
+		} else if (ProduceType.OQC_OK.equals(query.getProduceType()) || ProduceType.OQC_NG.equals(query.getProduceType())) {
+			sql.append(" and t.produce_type = '" + query.getProduceType().name() + "'");
 		}
 		if (query.getEndTimeFrom() != null) {
 			sql.append(" and t.end_time >= ? ");

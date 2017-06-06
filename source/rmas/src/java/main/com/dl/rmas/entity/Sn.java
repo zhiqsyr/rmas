@@ -147,15 +147,21 @@ public class Sn extends BusinessEntity implements Comparable<Sn> {
 	
 	@Column(name = "qc_time")
 	private Date qcTime;
-	
+
 	@Column(name = "qc_result")
-	private String qcResult;	
-	
+	private String qcResult;
+
+	@Column(name = "oqcer")
+	private Integer oqcer;
+
 	@Column(name = "oqc_result")
 	private String oqcResult;	
 
 	@Column(name = "oqc_remark")
 	private String oqcRemark;
+
+	@Column(name = "oqc_time")
+	private Date oqcTime;
 	
 	@Column(name = "keyouter")
 	private Integer keyouter;
@@ -476,6 +482,14 @@ public class Sn extends BusinessEntity implements Comparable<Sn> {
 		this.qcTime = qcTime;
 	}
 
+	public Date getOqcTime() {
+		return oqcTime;
+	}
+
+	public void setOqcTime(Date oqcTime) {
+		this.oqcTime = oqcTime;
+	}
+
 	public Integer getKeyouter() {
 		return this.keyouter;
 	}
@@ -591,7 +605,15 @@ public class Sn extends BusinessEntity implements Comparable<Sn> {
 	public void setQcResult(String qcResult) {
 		this.qcResult = qcResult;
 	}
-	
+
+	public Integer getOqcer() {
+		return oqcer;
+	}
+
+	public void setOqcer(Integer oqcer) {
+		this.oqcer = oqcer;
+	}
+
 	public String getOqcResult() {
 		return oqcResult;
 	}
@@ -599,7 +621,7 @@ public class Sn extends BusinessEntity implements Comparable<Sn> {
 	public void setOqcResult(String oqcResult) {
 		this.oqcResult = oqcResult;
 	}
-	
+
 	public String getRma() {
 		if (order != null) {
 			return order.getRma();

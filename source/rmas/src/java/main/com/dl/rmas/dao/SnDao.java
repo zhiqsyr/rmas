@@ -148,9 +148,10 @@ public class SnDao extends BaseDao {
 		if (queryDto.getFinalResult() != null) {
 			dc.add(Restrictions.eq("finalResult", queryDto.getFinalResult()));
 		}
-		if (queryDto.getOqcResult() != null) {
-			dc.add(Restrictions.sqlRestriction("(this_.oqc_result is null or this_.oqc_result = 'NG')"));
-		}
+		// deleted by dongbz at 20170605 只需匹配status=WAIT_OQC
+//		if (queryDto.getOqcResult() != null) {
+//			dc.add(Restrictions.sqlRestriction("(this_.oqc_result is null or this_.oqc_result = 'NG')"));
+//		}
 		
 		if (pagingDto == null) {
 			dc.addOrder(org.hibernate.criterion.Order.desc("createTime"));
@@ -185,13 +186,14 @@ public class SnDao extends BaseDao {
 		sql.append("SELECT entry.user_name userName, o.custrma, o.rma, s.sn_index snIndex, s.sn, p.pn, p.pcb_type pcbType, dc.code_key productType, ");
 		sql.append("	o.keyin_status keyinStatus, s.hard_level hardLevel, date_format(o.receive_time, '%Y-%m-%d') receiveTime,");
 		sql.append("	date_format(s.create_time, '%Y-%m-%d') createTime, date_format(s.assign_time, '%Y-%m-%d') assignTime,");
-		sql.append("	date_format(s.repaired_time, '%Y-%m-%d') repairedTime, date_format(s.qc_time, '%Y-%m-%d') qcTime,");
+		sql.append("	date_format(s.repaired_time, '%Y-%m-%d') repairedTime, date_format(s.qc_time, '%Y-%m-%d') qcTime,  date_format(s.oqc_time, '%Y-%m-%d') oqcTime,");
 		sql.append("	date_format(s.do_time, '%Y-%m-%d') doTime, date_format(o.close_time, '%Y-%m-%d') closeTime,");
 		sql.append("	s.status, flasher.user_name flasherName, flasher.user_no flasherNo, s.flash_result flashResult,");
 		sql.append("	repairer.user_name repairerName, repairer.user_no repairerNo, code.code_name repairCode,");
 		sql.append("	s.repair_remark repairRemark, s.repair_result repairResult, s.material_used materialUsed,");
-		sql.append("	b.material_name partName, b.category cate, b.item_cate itemCate, b.material_no materialNo, b.ino ino, rm.number usedAmount, qcer.user_name qcerName, qcer.user_no qcerNo,");
-		sql.append("	s.qc_result qcResult, stoper.user_name stoperName, stoper.user_no stoperNo, s.stop_reason stopReason,");
+		sql.append("	b.material_name partName, b.category cate, b.item_cate itemCate, b.material_no materialNo, b.ino ino, rm.number usedAmount, ");
+		sql.append("    qcer.user_name qcerName, qcer.user_no qcerNo, oqcer.user_name oqcerName, oqcer.user_no oqcerNo, ");
+		sql.append("	s.qc_result qcResult, s.oqc_result oqcResult, stoper.user_name stoperName, stoper.user_no stoperNo, s.stop_reason stopReason,");
 		sql.append("	s.final_result finalResult, s.keep_status keepStatus, s.mac_imei1 macImei1, s.mac_imei1_n macImei1N,");
 		sql.append("	s.mac_imei2 macImei2, s.mac_imei2_n macImei2N, ");
 		sql.append("	cidType.code_name cidTypeFormatted, cfd.code_name customerFaultDescFormatted, ");
@@ -204,6 +206,7 @@ public class SnDao extends BaseDao {
 		sql.append("LEFT JOIN sm_user flasher ON s.flasher = flasher.user_id ");
 		sql.append("LEFT JOIN sm_user repairer ON s.repairer = repairer.user_id ");
 		sql.append("LEFT JOIN sm_user qcer ON s.qcer = qcer.user_id ");
+		sql.append("LEFT JOIN sm_user oqcer ON s.oqcer = oqcer.user_id ");
 		sql.append("LEFT JOIN sm_user stoper ON s.stoper = stoper.user_id ");
 		sql.append("LEFT JOIN sm_dict_code code ON s.repair_code = code.code_id ");
 		sql.append("LEFT JOIN sm_dict_code cidType ON s.cid_type = cidType.code_id ");

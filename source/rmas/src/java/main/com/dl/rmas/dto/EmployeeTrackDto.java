@@ -149,5 +149,12 @@ public class EmployeeTrackDto {
 		
 		return qcCount.doubleValue()/qcCount.add(qcNgCount).doubleValue();
 	}
+	public Double getOqcPassRate() {
+		if (oqcNgCount.intValue() == 0) {
+			return 1D;
+		}
+
+		return oqcCount.doubleValue()/oqcCount.add(oqcNgCount).doubleValue();
+	}
 	
 }

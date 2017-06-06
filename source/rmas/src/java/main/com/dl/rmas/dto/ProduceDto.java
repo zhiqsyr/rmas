@@ -26,6 +26,7 @@ public class ProduceDto {
 	private String assignTime;
 	private String repairedTime;
 	private String qcTime;
+	private String oqcTime;
 	private String doTime;
 	private String closeTime;
 	private String status;
@@ -48,6 +49,10 @@ public class ProduceDto {
 	private String qcerNo;
 	private String qcResult;
 	private String qcRemark;
+	private String oqcerName;
+	private String oqcerNo;
+	private String oqcResult;
+	private String oqcRemark;
 	private String stoperName;
 	private String stoperNo;
 	private String finalResult;
@@ -182,6 +187,15 @@ public class ProduceDto {
 	public void setQcTime(String qcTime) {
 		this.qcTime = qcTime;
 	}
+
+	public String getOqcTime() {
+		return oqcTime;
+	}
+
+	public void setOqcTime(String oqcTime) {
+		this.oqcTime = oqcTime;
+	}
+
 	public String getDoTime() {
 		return doTime;
 	}
@@ -314,6 +328,39 @@ public class ProduceDto {
 	public void setQcRemark(String qcRemark) {
 		this.qcRemark = qcRemark;
 	}
+
+	public String getOqcerName() {
+		return oqcerName;
+	}
+
+	public void setOqcerName(String oqcerName) {
+		this.oqcerName = oqcerName;
+	}
+
+	public String getOqcerNo() {
+		return oqcerNo;
+	}
+
+	public void setOqcerNo(String oqcerNo) {
+		this.oqcerNo = oqcerNo;
+	}
+
+	public String getOqcResult() {
+		return oqcResult;
+	}
+
+	public void setOqcResult(String oqcResult) {
+		this.oqcResult = oqcResult;
+	}
+
+	public String getOqcRemark() {
+		return oqcRemark;
+	}
+
+	public void setOqcRemark(String oqcRemark) {
+		this.oqcRemark = oqcRemark;
+	}
+
 	public String getStoperName() {
 		return stoperName;
 	}

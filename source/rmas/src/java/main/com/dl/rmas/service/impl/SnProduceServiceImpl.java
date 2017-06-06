@@ -103,7 +103,7 @@ public class SnProduceServiceImpl extends BaseServiceImpl implements SnProduceSe
 		Map<String, Object> beans = new HashMap<String, Object>();
 		beans.put("result", result);
 		String path = "/data/rmas/ReportForms/";
-		
+
 		// 1）生成EXCEL
 		XLSTransformer transformer = new XLSTransformer();
 		ClassPathResource cpr = new ClassPathResource("/Config/template/template_employee_benefit.xls");
@@ -152,12 +152,19 @@ public class SnProduceServiceImpl extends BaseServiceImpl implements SnProduceSe
 	
 	@Override
 	public void doExportDetail(SnProduce query) throws Exception {
+		Map<String, Object> beans = new HashMap<String, Object>();
+
 		List<ProduceDto> result;
 		String template;
 		
-		// QC 时，导出模板不同
-		if (query.getProduceType().equals(ProduceType.QC)
-				|| query.getProduceType().equals(ProduceType.QC_NG)) {
+		// QC、OQC 时，导出模板不同
+		if (query.getProduceType().equals(ProduceType.QC) || query.getProduceType().equals(ProduceType.QC_NG)
+				|| query.getProduceType().equals(ProduceType.OQC_OK) || query.getProduceType().equals(ProduceType.OQC_NG)) {
+			if (query.getProduceType().equals(ProduceType.QC) || query.getProduceType().equals(ProduceType.QC_NG))
+				beans.put("tag", "QC");
+			if (query.getProduceType().equals(ProduceType.OQC_OK) || query.getProduceType().equals(ProduceType.OQC_NG))
+				beans.put("tag", "OQC");
+
 			result = snProductDao.findProduceDtosByQuery4QC(query);
 			for (ProduceDto dto : result) {
 				doSetRepairs4ProduceDto(dto, dto.getSnId(), dto.getProduceId());
@@ -168,11 +175,10 @@ public class SnProduceServiceImpl extends BaseServiceImpl implements SnProduceSe
 			result = snProductDao.findProduceDtosByQuery(query);
 			template = "/Config/template/template_employee_benefit_detail.xls";
 		}
-		
-		Map<String, Object> beans = new HashMap<String, Object>();
+
 		beans.put("result", result);
 		String path = "/data/rmas/ReportForms/";
-		
+
 		// 1）生成EXCEL
 		XLSTransformer transformer = new XLSTransformer();
 		ClassPathResource cpr = new ClassPathResource(template);
@@ -194,7 +200,7 @@ public class SnProduceServiceImpl extends BaseServiceImpl implements SnProduceSe
 	@Override
 	public void doSetRepairs4ProduceDto(ProduceDto produceDto, Integer snId, Integer produceId) {
 		SnProduce repair = snProductDao.findRepairInformation(snId, produceId);
-		if (repair == null) {
+		if (repair == null || repair.getProducer() == null) {
 			return;
 		}
 		

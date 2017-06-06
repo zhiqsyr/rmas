@@ -209,3 +209,8 @@ create index index_producer on t_sn_produce(producer);
 create index index_sn_bom_id on t_sn_repair_material(sn_id, bom_id);
 
 -- 以上已经执行 --
+
+alter table t_sn add oqcer int after qc_result;
+alter table t_sn add oqc_time datetime;
+
+-- 以上已经执行 --
