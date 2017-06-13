@@ -3,6 +3,6 @@
 /source/rmas/.settings/*
 *.project
 *.iml
-/source/rmas/out/*
+/source/rmas/build/*
 classes/*
 *.class
