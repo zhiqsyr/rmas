@@ -147,7 +147,6 @@ public class SnProduceServiceImpl extends BaseServiceImpl implements SnProduceSe
 				"Employee Return Detail_" + DateUtils.transferDate2Str(new Date(), "yyyyMMddHHmmss") + ".xls");
 		
 		Filedownload.save(new File(excelRealPath), "application/x-download");
-		
 	}
 	
 	@Override

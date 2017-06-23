@@ -197,7 +197,8 @@ public class SnDao extends BaseDao {
 		sql.append("	s.final_result finalResult, s.keep_status keepStatus, s.mac_imei1 macImei1, s.mac_imei1_n macImei1N,");
 		sql.append("	s.mac_imei2 macImei2, s.mac_imei2_n macImei2N, ");
 		sql.append("	cidType.code_name cidTypeFormatted, cfd.code_name customerFaultDescFormatted, ");
-		sql.append("	ot.code_name outletFormatted, s.fail_code failCode, s.case_id caseId, s.remark ");
+		sql.append("	ot.code_name outletFormatted, s.fail_code failCode, s.case_id caseId, s.remark, ");
+		sql.append("	(select pre.do_time from t_sn pre where pre.sn = s.sn and pre.sn_id != s.sn_id order by pre.sn_id desc limit 1) lastDoDate ");
 		sql.append("FROM t_sn s ");
 		sql.append("JOIN sm_user entry ON s.create_user = entry.user_id ");
 		sql.append("JOIN t_order o ON s.order_id = o.order_id ");

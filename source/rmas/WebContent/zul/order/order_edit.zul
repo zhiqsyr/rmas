@@ -40,15 +40,23 @@
 			<textbox value="@bind(vm.receiveOrder.expressNo) @save(vm.receiveOrder.expressNo, before='onSubmit')"
 			 	constraint="no empty"  maxlength="50"></textbox>
 		</row>
-		<row spans="1,3">
+		<row>
 			<span>
 				<label value="*" style="color:red"></label>
 				<label value="${c:l('receipt.number')}"></label>
 			</span>
 			<hbox>
-				<intbox value="@bind(vm.receiveOrder.boxes) @save(vm.receiveOrder.boxes, before='onSubmit')" 
+				<intbox value="@bind(vm.receiveOrder.boxes) @save(vm.receiveOrder.boxes, before='onSubmit')"
 					constraint="no empty"  maxlength="10"></intbox>
 				<label value="${c:l('box')}"></label>
+			</hbox>
+			<span>
+				<label value="*" style="color:red"></label>
+				<label value="Received Qty"></label>
+			</span>
+			<hbox>
+				<intbox value="@bind(vm.receiveOrder.totalQty)"></intbox>
+				<label value="PCS"></label>
 			</hbox>
 		</row>
 		<row spans="1,3">

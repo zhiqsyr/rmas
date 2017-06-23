@@ -73,19 +73,21 @@
 <listbox width="100%" vflex="true"
 	model="@load(vm.result)" selectedItem="@bind(vm.selected)">
 	<listhead>
-		<listheader label="${c:l('rma.no')}" width="130px" sort="auto(rma)" 
+		<listheader label="${c:l('rma.no')}" width="125px" sort="auto(rma)"
 				onSort="@command('onSort', prop='rma', ascending=event.ascending)"></listheader>
 		<listheader label="${c:l('customer.companyname')}" width="165px" sort="auto(customerId)" 
 				onSort="@command('onSort', prop='customerId', ascending=event.ascending)"></listheader>
 		<listheader label="${c:l('customer.order.no')}" width="140px" sort="auto(custrma)" 
 				onSort="@command('onSort', prop='custrma', ascending=event.ascending)"></listheader>
-		<listheader label="${c:l('express.company')}" width="130px" sort="auto(expressCom)" 
+		<listheader label="${c:l('express.company')}" width="125px" sort="auto(expressCom)"
 				onSort="@command('onSort', prop='expressCom', ascending=event.ascending)"></listheader>
-		<listheader label="${c:l('express.number')}" width="130px" sort="auto(expressNo)" 
+		<listheader label="${c:l('express.number')}" width="120px" sort="auto(expressNo)"
 				onSort="@command('onSort', prop='expressNo', ascending=event.ascending)"></listheader>
-		<listheader label="${c:l('receipt.numberofbox')}" width="145px" sort="auto(boxes)" 
+		<listheader label="${c:l('receipt.numberofbox')}" width="140px" sort="auto(boxes)"
 				onSort="@command('onSort', prop='boxes', ascending=event.ascending)"></listheader>
-		<listheader label="${c:l('receive.person')}" width="110px" sort="auto(receiver)" 
+		<listheader label="Received Qty(PCS)" width="130px"></listheader>
+		<listheader label="Wait Keyin(PCS)" width="120px"></listheader>
+		<listheader label="${c:l('receive.person')}" width="110px" sort="auto(receiver)"
 				onSort="@command('onSort', prop='receiver', ascending=event.ascending)"></listheader>
 		<listheader label="${c:l('receive.date')}" width="140px" sort="auto(receiveTime)" 
 				onSort="@command('onSort', prop='receiveTime', ascending=event.ascending)"></listheader>
@@ -111,6 +113,8 @@
 				<label value="@load(item.expressNo)" tooltiptext="@load(item.expressNo)" sclass="texthidenstyle"></label>
 			</listcell>
 			<listcell label="@load(item.boxes)"></listcell>
+			<listcell label="@load(item.totalQty)"></listcell>
+			<listcell label="@load(item.totalRemain)"></listcell>
 			<listcell>
 				<label value="@load(item.receiver) @converter('com.dl.rmas.web.converter.UserIdConverter')" 
 					tooltiptext="@load(item.receiver) @converter('com.dl.rmas.web.converter.UserIdConverter')" 

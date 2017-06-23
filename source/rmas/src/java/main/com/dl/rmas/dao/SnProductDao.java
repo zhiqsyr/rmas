@@ -190,7 +190,7 @@ public class SnProductDao extends BaseDao {
 		StringBuffer sql = new StringBuffer();
 		List<Object> params = new ArrayList<Object>();
 		
-		sql.append(" select entry.user_name userName, o.custrma, o.rma, cl.sn_index snIndex, cl.sn, p.pn,  ");
+		sql.append(" select entry.user_name userName, o.custrma, o.rma, o.receive_time receiveDate, lst.do_time lastDoDate, cl.sn_index snIndex, cl.sn, p.pn,  ");
 		sql.append(" 	p.pcb_type pcbType, dc.code_key productType, cl.keep_status keepStatus,  ");
 		sql.append(" 	(select count(1) from t_sn bf where bf.sn = cl.sn and bf.status = 'DONE' and bf.do_time < cl.create_time) rtTimes, ");	// 当前是第几次返修
 		sql.append(" 	repairer.user_name repairerName, repairer.user_no repairerNo, code.code_name repairCode, ");

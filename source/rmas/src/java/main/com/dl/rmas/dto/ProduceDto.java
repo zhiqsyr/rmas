@@ -2,6 +2,8 @@ package com.dl.rmas.dto;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Date;
+
 /**
  * template_produce_query.xls dto
  * 
@@ -14,6 +16,8 @@ public class ProduceDto {
 	private String userName;
 	private String custrma;
 	private String rma;
+	private Date receiveDate;
+	private Date lastDoDate;
 	private Integer snIndex;
 	private String sn;
 	private String pn;
@@ -106,6 +110,23 @@ public class ProduceDto {
 	public void setRma(String rma) {
 		this.rma = rma;
 	}
+
+	public Date getReceiveDate() {
+		return receiveDate;
+	}
+
+	public void setReceiveDate(Date receiveDate) {
+		this.receiveDate = receiveDate;
+	}
+
+	public Date getLastDoDate() {
+		return lastDoDate;
+	}
+
+	public void setLastDoDate(Date lastDoDate) {
+		this.lastDoDate = lastDoDate;
+	}
+
 	public Integer getSnIndex() {
 		return snIndex;
 	}
