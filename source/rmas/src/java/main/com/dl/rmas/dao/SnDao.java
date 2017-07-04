@@ -366,11 +366,11 @@ public class SnDao extends BaseDao {
 	 */
 	@SuppressWarnings("unchecked")
 	public String findFinalresult(String sn){
-		String sql = "SELECT s.final_result as finalResult FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		String sql = "SELECT s.final_result as finalResult FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc limit 1";
 		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
 				.setResultTransformer(Transformers.aliasToBean(FinalResultDto.class));
 		List<FinalResultDto> result = q.list();
-		if (result != null) {
+		if (!CollectionUtils.isEmpty(result)) {
 			return result.get(0).getFinalResult();
 			
 		}
@@ -385,11 +385,11 @@ public class SnDao extends BaseDao {
 	 */
 	@SuppressWarnings("unchecked")
 	public Timestamp findDODate(String sn) {
-		String sql = "SELECT s.do_time as doDate FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		String sql = "SELECT s.do_time as doDate FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc limit 1";
 		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
 				.setResultTransformer(Transformers.aliasToBean(DODateDto.class));
 		List<DODateDto> result = q.list();
-		if (result != null) {
+		if (!CollectionUtils.isEmpty(result)) {
 			return result.get(0).getDoDate();
 			
 		}
@@ -405,11 +405,11 @@ public class SnDao extends BaseDao {
 	 */
 	@SuppressWarnings("unchecked")
 	public String findStopReason(String sn) {
-		String sql = "SELECT s.stop_reason as stopReason FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc";
+		String sql = "SELECT s.stop_reason as stopReason FROM t_sn s WHERE s.sn = '"+ sn +"' order by s.sn_id desc limit 1";
 		Query q = hibernateTemplate.getSessionFactory().getCurrentSession().createSQLQuery(sql)
 				.setResultTransformer(Transformers.aliasToBean(StopReasonDto.class));
 		List<StopReasonDto> result = q.list();
-		if (result != null) {
+		if (!CollectionUtils.isEmpty(result)) {
 			return result.get(0).getStopReason();
 			
 		}

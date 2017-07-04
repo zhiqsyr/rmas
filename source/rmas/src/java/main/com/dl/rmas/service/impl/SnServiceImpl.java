@@ -65,7 +65,7 @@ public class SnServiceImpl extends BaseServiceImpl implements SnService {
 	
 	@Override
 	public void doCreateSn(Sn sn, Order order) {
-		sn.setSnIndex(order.getTotalFinished() + 1);
+		sn.setSnIndex(order.getTotalFinished() == null ? 1 : order.getTotalFinished() + 1);
 //		sn.setStatus(SnStatus.WAIT_L1KEYIN);
 		sn.setHardLevel(0);
 		
